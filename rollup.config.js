@@ -15,8 +15,14 @@ export default {
 	},
 	plugins: [
 		resolve(), 
-		commonjs(),
-		replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+		commonjs({
+			namedExports: {
+				'node_modules/react/index.js': ['createContext', 'forwardRef', 'useContext', 'Component', 'Fragment', 'Children', 'cloneElement'],
+				'node_modules/react-dom/index.js': ['createPortal'],
+				'node_modules/leaflet/dist/leaflet-src.js': ['Control', 'Circle', 'CircleMarker', 'DomUtil', 'FeatureGroup', 'GeoJSON', 'GridLayer', 'ImageOverlay', 'latLngBounds', 'LayerGroup', 'Map', 'Marker', 'Polygon', 'Polyline', 'Popup', 'Rectangle', 'TileLayer', 'Tooltip', 'VideoOverlay']
+			}
+		}),
+		replace({ 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV) }),
 		!production && livereload(),
 		production && terser()
 	]
