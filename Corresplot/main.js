@@ -6,6 +6,8 @@ import {json} from 'd3-fetch'
 
 import Main from './components/Main.js'
 
+import getPlacesPosition from './geography/getPlacesPosition';
+
 const html = htm.bind(createElement);
 
 function renderUI({drivers, positionsByPlace}){
@@ -22,20 +24,18 @@ const store = new Store({
     },
     mutations: {
         addDrivers(state, drivers){
-            console.log('new drivers', drivers)
             state.drivers = [...drivers, ...state.drivers]
         },
         addPositionsByPlace(state, positionsByPlace){
-            state.positionByPlace = new Map([...state.positionsByPlace, ...positionsByPlace])
+            state.positionsByPlace = new Map([...state.positionsByPlace, ...positionsByPlace])
         }
     }
 })
 
 store.subscribe(state => {
-    const {addDrivers, addPositionsByPlace} = store.mutations
-    const {drivers, positionByPlace} = state
+    const {drivers, positionsByPlace} = state
 
-    renderUI({drivers, positionByPlace})
+    renderUI({drivers, positionsByPlace})
 })
 
 console.log(store.state)
@@ -44,4 +44,13 @@ console.log(store.state)
 renderUI(store.state)
 
 json('/drivers')
-.then(store.mutations.addDrivers)
+.then(drivers => {
+    store.mutations.addDrivers(drivers)
+
+    getPlacesPosition(new Set(drivers.map(d => d['Départ'])))
+    .then(banResults => {
+        store.mutations.addPositionsByPlace(new Map(
+            banResults.map( ({adresse, longitude, latitude}) => ([adresse, {lng: longitude, lat: latitude}]) )
+        ))
+    })
+})
