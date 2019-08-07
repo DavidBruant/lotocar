@@ -7,5 +7,11 @@ import Map from './Map.js'
 const html = htm.bind(React.createElement);
 
 export default function({drivers}){
-    return html`<${Map}/><${DriversList} drivers=${drivers}/>`
+    return html`
+        <h1>Lotocar</h1>
+        <main>
+            <${Map}/>
+            <${DriversList} drivers=${drivers}/>
+        </main>
+    `
 }
