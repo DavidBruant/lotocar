@@ -7,38 +7,38 @@ import {json} from 'd3-fetch'
 import Main from './components/Main.js'
 
 import getDirections from './geography/getDirections.js';
-import tripString from './geography/tripString.js'
+import driverToTrip from './geography/driverToTrip';
 import googleDirectionsToCorresplotDirections from './geography/googleDirectionsToCorresplotDirections.js'
+import CorresplotMap from './components/Map';
 
 const html = htm.bind(createElement);
 
-function renderUI({drivers, directions}){
+function renderUI({driversByTrip, directionsByTrip}){
     render(
-        html`<${Main} ...${{drivers, directions}} />`, 
+        html`<${Main} ...${{driversByTrip, directionsByTrip}} />`, 
         document.body
     )
 }
 
 const store = new Store({
     state: {
-        drivers: [],
-        // directions are keyed on the stringification of a trip
-        directions: new Map()
+        driversByTrip: new Map(),
+        directionsByTrip: new Map()
     },
     mutations: {
-        addDrivers(state, drivers){
-            state.drivers = [...drivers, ...state.drivers]
+        addDrivers(state, driversByTrip){
+            state.driversByTrip = new Map([...driversByTrip, ...state.driversByTrip])
         },
-        addDirections(state, directions){
-            state.directions = new Map([...state.directions, ...directions])
+        addDirections(state, directionsByTrip){
+            state.directionsByTrip = new Map([...state.directionsByTrip, ...directionsByTrip])
         }
     }
 })
 
 store.subscribe(state => {
-    const {drivers, directions} = state
+    const {driversByTrip, directionsByTrip} = state
 
-    renderUI({drivers, directions})
+    renderUI({driversByTrip, directionsByTrip})
 })
 
 console.log(store.state)
@@ -46,20 +46,44 @@ console.log(store.state)
 // initial render 
 renderUI(store.state)
 
+
+function cleanupDrivers(drivers){
+    for(const driver of drivers){
+        driver['Départ'] = driver['Départ'].trim()
+        driver['Arrivée'] = driver['Arrivée'].trim()
+    }
+    return drivers
+}
+
+
 json('/drivers')
+.then(cleanupDrivers)
 .then(drivers => {
-    store.mutations.addDrivers(drivers)
+    const driversByTrip = new Map()
 
-    const firstDriver = drivers[0];
+    for(const driver of drivers){
+        const trip = driverToTrip(driver);
 
-    const trip = {
-        origin: firstDriver['Départ'],
-        destination: firstDriver['Arrivée']
+        const tripDrivers = driversByTrip.get(trip) || []
+        tripDrivers.push(driver)
+        driversByTrip.set(trip, tripDrivers)
     }
 
-    getDirections(trip)
-    .then(directions => {
-        store.mutations.addDirections(new Map([[tripString(trip), googleDirectionsToCorresplotDirections(directions)]]))
-    })
+    store.mutations.addDrivers(driversByTrip)
+
+    const trips = [...driversByTrip.keys()]
+
+    console.log('trips', trips)
+
+    
+    Promise.all(trips.map(trip => {
+        return getDirections(trip)
+        .then(googleDirections => {
+            const corresplotDirections = googleDirectionsToCorresplotDirections(googleDirections)
+            return corresplotDirections ? [trip, corresplotDirections] : undefined
+        })
+    }))
+    .then(directions => store.mutations.addDirections(new Map(directions.filter(x => !!x))))
+    .catch(console.error)
 
 })

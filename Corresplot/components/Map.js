@@ -3,6 +3,7 @@ import htm from 'htm'
 
 import { Map, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet'
 
+import tripString from '../geography/tripString.js'
 
 const html = htm.bind(React.createElement);
 
@@ -17,18 +18,23 @@ const attribution = `Map data &copy; <a href="https://www.openstreetmap.org/">Op
 
 const zoom = 10;
 
-export default function CorresplotMap({directions}){
+export default function CorresplotMap({directionsByTrip}){
+    console.log('directionsByTrip', directionsByTrip)
+
+    directionsByTrip = directionsByTrip || new Map()
+
     return html`
-        <${Map} id="yo" className="map" center=${CAHORS_POSITION} zoom=${zoom}>
+        <${Map} className="map" center=${CAHORS_POSITION} zoom=${zoom}>
             <${TileLayer}
                 attribution=${attribution}
                 url=${tileLayerURL}
             />
             ${
-                [...directions].map(([tripString, direction]) => {
+                [...directionsByTrip.entries()].map(([trip, directions]) => {
+                    const str = tripString(trip)
                     return html`
-                        <${GeoJSON} key=${tripString} data=${direction.geoJSON}>
-                            <${Popup}>${tripString}<//>
+                        <${GeoJSON} key=${str} data=${directions.geoJSON}>
+                            <${Popup}>${str}<//>
                         <//>`
                 })
             }

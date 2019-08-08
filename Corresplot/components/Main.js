@@ -6,12 +6,11 @@ import Map from './Map.js'
 
 const html = htm.bind(React.createElement);
 
-export default function({drivers, directions}){
+export default function({driversByTrip, directionsByTrip}){
     return html`
         <h1>Lotocar</h1>
         <main>
-            <${Map} directions=${directions}/>
-            <!-- <${DriversList} drivers=${drivers}/> -->
+            <${Map} directionsByTrip=${directionsByTrip}/>
         </main>
     `
 }
