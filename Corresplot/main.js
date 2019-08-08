@@ -6,13 +6,15 @@ import {json} from 'd3-fetch'
 
 import Main from './components/Main.js'
 
-import getPlacesPosition from './geography/getPlacesPosition';
+import getDirections from './geography/getDirections.js';
+import tripString from './geography/tripString.js'
+import googleDirectionsToCorresplotDirections from './geography/googleDirectionsToCorresplotDirections.js'
 
 const html = htm.bind(createElement);
 
-function renderUI({drivers, positionsByPlace}){
+function renderUI({drivers, directions}){
     render(
-        html`<${Main} ...${{drivers, positionsByPlace}} />`, 
+        html`<${Main} ...${{drivers, directions}} />`, 
         document.body
     )
 }
@@ -20,22 +22,23 @@ function renderUI({drivers, positionsByPlace}){
 const store = new Store({
     state: {
         drivers: [],
-        positionsByPlace: new Map()
+        // directions are keyed on the stringification of a trip
+        directions: new Map()
     },
     mutations: {
         addDrivers(state, drivers){
             state.drivers = [...drivers, ...state.drivers]
         },
-        addPositionsByPlace(state, positionsByPlace){
-            state.positionsByPlace = new Map([...state.positionsByPlace, ...positionsByPlace])
+        addDirections(state, directions){
+            state.directions = new Map([...state.directions, ...directions])
         }
     }
 })
 
 store.subscribe(state => {
-    const {drivers, positionsByPlace} = state
+    const {drivers, directions} = state
 
-    renderUI({drivers, positionsByPlace})
+    renderUI({drivers, directions})
 })
 
 console.log(store.state)
@@ -47,10 +50,16 @@ json('/drivers')
 .then(drivers => {
     store.mutations.addDrivers(drivers)
 
-    getPlacesPosition(new Set(drivers.map(d => d['Départ'])))
-    .then(banResults => {
-        store.mutations.addPositionsByPlace(new Map(
-            banResults.map( ({adresse, longitude, latitude}) => ([adresse, {lng: longitude, lat: latitude}]) )
-        ))
+    const firstDriver = drivers[0];
+
+    const trip = {
+        origin: firstDriver['Départ'],
+        destination: firstDriver['Arrivée']
+    }
+
+    getDirections(trip)
+    .then(directions => {
+        store.mutations.addDirections(new Map([[tripString(trip), googleDirectionsToCorresplotDirections(directions)]]))
     })
+
 })

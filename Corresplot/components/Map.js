@@ -1,7 +1,8 @@
 import React from 'react'
 import htm from 'htm'
 
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
+import { Map, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet'
+
 
 const html = htm.bind(React.createElement);
 
@@ -12,11 +13,11 @@ const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiZGF2aWRicnVhbnQiLCJhIjoiY2p5enA0MHNmMDNw
 const id = 'mapbox.streets';
 
 const tileLayerURL = `https://api.tiles.mapbox.com/v4/${id}/{z}/{x}/{y}.png?access_token=${MAPBOX_ACCESS_TOKEN}`
-const attribution = `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`
+const attribution = `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>, Directions by GoogleMaps`
 
 const zoom = 10;
 
-export default function CorresplotMap({positionsByPlace}){
+export default function CorresplotMap({directions}){
     return html`
         <${Map} id="yo" className="map" center=${CAHORS_POSITION} zoom=${zoom}>
             <${TileLayer}
@@ -24,10 +25,10 @@ export default function CorresplotMap({positionsByPlace}){
                 url=${tileLayerURL}
             />
             ${
-                [...positionsByPlace].map(([adresse, position], i) => {
+                [...directions].map(([tripString, direction]) => {
                     return html`
-                        <${Marker} key=${i} position=${position}>
-                            <${Popup}>${adresse}<//>
+                        <${GeoJSON} key=${tripString} data=${direction.geoJSON}>
+                            <${Popup}>${tripString}<//>
                         <//>`
                 })
             }
