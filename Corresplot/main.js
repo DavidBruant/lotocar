@@ -71,7 +71,8 @@ json('/drivers')
 
     store.mutations.addDrivers(driversByTrip)
 
-    const trips = [...driversByTrip.keys()]
+    // Limiting to 5 trips for now, because each refresh causes calls to Google Direction API which is payable
+    const trips = [...driversByTrip.keys()].slice(0, 5)
 
     console.log('trips', trips)
 

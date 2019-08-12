@@ -6,17 +6,17 @@ export default function googleDirectionsToCorresplotDirections(googleDirections)
         const leg = route.legs[0]
 
         return {
-            distance: leg.distance.value,
-            duration: leg.duration.value,
-            origin: {
-                text: leg.start_address,
+            distance: leg.distance.value, // inferable from points
+            duration: leg.duration.value, // inferable from points
+            origin: { // part of original request
+                text: leg.start_address, 
                 position: leg.start_location
             },
-            destination: {
+            destination: { // part of original request
                 text: leg.end_address,
                 position: leg.end_location
             },
-            geoJSON : polyline.toGeoJSON(route.overview_polyline.points)
+            geoJSON : polyline.toGeoJSON(route.overview_polyline.points) // allowed to be cached
         }
     }
     else{
