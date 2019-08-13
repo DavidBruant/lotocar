@@ -18,12 +18,41 @@
         <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?flags=always&features=default%2Ces2017%2Ces2016%2Ces2015%2Cfetch"></script>
         -->
         <style>
-            ul > li{
-                list-style-type: '- ';
+            main{
+                display: flex;
+                flex-direction: row;
+            }
+
+            h1{
+                text-align: center;
             }
 
             .map{
+                flex: 1;
                 height: 70vh;
+            }
+
+            .trip-selection{
+                width: 30em;
+            }
+
+            .trip-request-entry{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .trip-request-entry .geography{
+                display: flex;
+                flex-direction: row;
+            }
+            .trip-request-entry .geography label{
+                text-align: center;
+            }
+
+            .trip-request-entry button[type="submit"]{
+                width: 6em;
+                padding: 0.5em;
             }
         </style>
 

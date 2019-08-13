@@ -9,13 +9,15 @@ import Main from './components/Main.js'
 import getDirections from './geography/getDirections.js';
 import driverToTrip from './geography/driverToTrip';
 import googleDirectionsToCorresplotDirections from './geography/googleDirectionsToCorresplotDirections.js'
-import CorresplotMap from './components/Map';
 
 const html = htm.bind(createElement);
 
-function renderUI({driversByTrip, directionsByTrip}){
+function renderUI(store){
+    const {driversByTrip, directionsByTrip, tripRequest} = store.state
+    const {setTripRequest} = store.mutations
+
     render(
-        html`<${Main} ...${{driversByTrip, directionsByTrip}} />`, 
+        html`<${Main} ...${{driversByTrip, directionsByTrip, tripRequest, onTripRequestChange: setTripRequest}} />`, 
         document.body
     )
 }
@@ -23,7 +25,11 @@ function renderUI({driversByTrip, directionsByTrip}){
 const store = new Store({
     state: {
         driversByTrip: new Map(),
-        directionsByTrip: new Map()
+        directionsByTrip: new Map(),
+        tripRequest: {
+            origin: '',
+            destination: ''
+        }
     },
     mutations: {
         addDrivers(state, driversByTrip){
@@ -31,20 +37,21 @@ const store = new Store({
         },
         addDirections(state, directionsByTrip){
             state.directionsByTrip = new Map([...state.directionsByTrip, ...directionsByTrip])
+        },
+        setTripRequest(state, tripRequest){
+            state.tripRequest = tripRequest
         }
     }
 })
 
 store.subscribe(state => {
-    const {driversByTrip, directionsByTrip} = state
-
-    renderUI({driversByTrip, directionsByTrip})
+    renderUI(store)
 })
 
 console.log(store.state)
 
 // initial render 
-renderUI(store.state)
+renderUI(store)
 
 
 function cleanupDrivers(drivers){
