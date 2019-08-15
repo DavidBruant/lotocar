@@ -10,7 +10,7 @@ export default function({driversByTrip, directionsByTrip, tripRequest, onTripReq
     return html`
         <h1 key="h1">Lotocar</h1>
         <main  key="main">
-            <${Map} directionsByTrip=${directionsByTrip}/>
+            <${Map} directionsByTrip=${directionsByTrip} tripRequest=${tripRequest}/>
             <${TripSelection} driversByTrip=${driversByTrip} tripRequest=${tripRequest} onTripRequestChange=${onTripRequestChange}/>
         </main>
     `
