@@ -20,7 +20,8 @@ export default function TripRequestEntry({tripRequest, onTripRequestChange}){
     }
 
     return html`
-        <form className="trip-request-entry" onSubmit=${onSubmit}>
+        <h2 key="h2">Demande de trajet</h2>
+        <form key="form" className="trip-request-entry" onSubmit=${onSubmit}>
             <section className="geography">
                 <label>
                     <strong>Départ</strong>
