@@ -24,7 +24,7 @@ function Driver({driver, tripDetails, onDriverClick}){
 
         detourClassName = additionalDistanceKM <= 5*AVERAGE_SPEED ? 
         'minor-detour' : 
-        (additionalDistanceKM <= 15*AVERAGE_SPEED/HOUR ?
+        (additionalDistanceKM <= 15*AVERAGE_SPEED ?
             'medium-detour' : 
             'major-detour')
     }
