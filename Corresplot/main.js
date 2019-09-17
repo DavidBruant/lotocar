@@ -97,7 +97,7 @@ function cleanupDrivers(drivers){
 }
 
 
-json('/drivers')
+json('/driver-trip-proposals')
 .then(cleanupDrivers)
 .then(drivers => {
     const driversByTrip = new Map()
