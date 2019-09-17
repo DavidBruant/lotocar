@@ -41,7 +41,9 @@ function TripProposal({tripProposal, tripDetails, onDriverClick}){
             </section>
             <section>
                 <span className="name">${Prénom} ${Nom}</span>
-                <span className="proposed-trip">(${Départ} - ${Arrivée} - ${Jours} - Heure: ${heureDépart})</span>
+                <span className="proposed-trip">
+                    ${Départ} - ${Arrivée} - <span className="datetime">${Jours} - Heure: ${heureDépart}</span>
+                </span>
                 <span className="contact">
                     <a href="${phoneLink}">${phone ? phone.trim() : `(pas de téléphone)`}</a>
                     <a href="${emailLink}">${email && email.includes('@') ? `email` : `(pas d'email)`}</a>
