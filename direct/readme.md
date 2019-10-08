@@ -30,10 +30,12 @@ Il manque :
 - receuillir le consentement (dont création de colonne dédiée dans le Google Spreadsheet)
 - affichage anonymisé
 - le bouton de révélation
+- peut-être mettre mieux en valeur les jours/heures
 
 
 #### Juste après
 
+- Ptèt mettre en place une adresse email pour que les personnes remontent les problèmes
 - Des analytics pour avoir de la visibilité sur les demandes et les résultats affichés
 - http**S**://trajets.lotocar.fr/
 - Ne pas envoyer côté client les données privées (même si elles ne sont pas affichées)
@@ -48,6 +50,7 @@ Il manque :
 
 - conducteur.rice.s peuvent déclarer un trajet ponctuel ou régulier
 - conducteur.rice.s peuvent "créer un compte" (on leur envoie un email avec une capability URL)
+    - on peut garder le formulaire GForm (afin de s'économiser l'effort de le refaire) et mettre en place un hook Google Script pour créer le morceau secret + email
 - conducteur.rice.s peuvent éditer leurs infos
 - quand le.a conducteur.rice préfère être contacté.e par email, on fournit un formulaire. Ce formulaire envoie l'email en tant que Lotocar, mais avec la vraie adresse email en `Reply to`
 - On peut mettre en place un mécanisme équivalent pour les SMS
