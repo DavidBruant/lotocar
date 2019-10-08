@@ -16,7 +16,7 @@ Il en résulte :
 
 #### MVP
 
-- Le lien sur lotocar.fr pour demander un covoiturage mène vers une page sur un sous-domaine dédié (genre trajets.lotocar.fr) qui permet aux passager.ère.s de chercher des conducteur.rice.s pertinent.e.s par critère géographique
+- Le lien sur lotocar.fr pour demander un covoiturage mène vers une page sur un sous-domaine dédié (genre http://trajets.lotocar.fr/ ) qui permet aux passager.ère.s de chercher des conducteur.rice.s pertinent.e.s par critère géographique
 - Les résultats sont anonymisés
 - Un bouton permet de contacter le.a conducteur.rice. Ce bouton révèle (sous réserve de consentement):
     - le numéro de téléphone (selon la préférence)
@@ -32,10 +32,26 @@ Il manque :
 - le bouton de révélation
 
 
-#### Après
+#### Juste après
 
-- des analytics pour avoir de la visibilité sur les demandes et les résultats affichés
-- ne pas envoyer côté client les données privées (même si elles ne sont pas affichées)
+- Des analytics pour avoir de la visibilité sur les demandes et les résultats affichés
+- http**S**://trajets.lotocar.fr/
+- Ne pas envoyer côté client les données privées (même si elles ne sont pas affichées)
+- Les passager.ère.s n'ont accès aux données de contact qu'après avoir partager leurs données (email valide,  nom, prénom, téléphone ?)
+- Analytics pour savoir qui a eu accès au contact de qui
+- on leur envoie un email de confirmation avec une [capability URL](https://w3ctag.github.io/capability-urls/) qui leur permet de chercher + contacter
+    - le morceau secret est stocké dans le localStorage pour que la personne aie accès à leur page "privée", même en passant par la version anonyme
+    - le local storage contient toujours la dernière recherche (anonyme ou pas)
+
+
+#### Plus tard
+
+- conducteur.rice.s peuvent déclarer un trajet ponctuel ou régulier
+- conducteur.rice.s peuvent "créer un compte" (on leur envoie un email avec une capability URL)
+- conducteur.rice.s peuvent éditer leurs infos
+- quand le.a conducteur.rice préfère être contacté.e par email, on fournit un formulaire. Ce formulaire envoie l'email en tant que Lotocar, mais avec la vraie adresse email en `Reply to`
+- On peut mettre en place un mécanisme équivalent pour les SMS
+
 
 
 ### Considérations transverses
@@ -45,7 +61,10 @@ Il manque :
         - Développement *mobile-first* 
         - polyfills
         - babel
-- Sécurité
-- Privacy
+- Sécurité - Privacy
+    - pas de partage d'info privée sans consentement
+    - pas de mot de passe, uniquement des capability URLs envoyées par email + site web en HTTPS
+        - la sécurité des infos Lotocar d'une personne repose principalement sur la sécurité de l'adresse email de cette personne
 - Relation à Wix
-
+    - on garde Wix pour la page d'acceuil parce que ça fait du travail en plus de l'enlever
+    - d'où le sous-domaine `trajets.lotocar.fr`
