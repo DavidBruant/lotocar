@@ -2,6 +2,12 @@ import { makeTrip } from '../geography/driverToTrip'
 import getDirections from '../geography/getDirections.js'
 import googleDirectionsToCorresplotDirections from '../geography/googleDirectionsToCorresplotDirections.js'
 import getPlacesPosition from '../geography/getPlacesPosition.js'
+import {
+	ASYNC_STATUS,
+	STATUS_PENDING,
+	STATUS_ERROR,
+	STATUS_VALUE
+} from './asyncStatusHelpers'
 
 export default function _actions(store) {
 	return {
@@ -48,12 +54,27 @@ export default function _actions(store) {
 									new Map([[trip, corresplotDirections]])
 								)
 							}
+
+							store.mutations.setTripRequest({
+								...store.state.tripRequest,
+								[ASYNC_STATUS]: STATUS_VALUE
+							})
 						})
-						.catch(console.error)
+						.catch(error => {
+							store.mutations.setTripRequest({
+								...store.state.tripRequest,
+								[ASYNC_STATUS]: STATUS_ERROR
+							})
+							console.error(error)
+						})
 				})
 			}
 
-			store.mutations.setTripRequest(trip)
+			store.mutations.setTripRequest({
+				...trip,
+				[ASYNC_STATUS]: STATUS_PENDING
+			})
+
 			store.mutations.displayedDriverTrips.clear()
 		},
 		toggleTripDisplay(trip) {
