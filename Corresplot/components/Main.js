@@ -28,6 +28,7 @@ export default function({
 				tripProposalsByTrip=${tripProposalsByTrip}
 				tripRequest=${tripRequest}
 				tripDetailsByTrip=${tripDetailsByTrip}
+				displayedDriverTrips=${displayedDriverTrips}
 				onTripRequestChange=${onTripRequestChange}
 				onTripClick=${onTripClick}
 			/>
