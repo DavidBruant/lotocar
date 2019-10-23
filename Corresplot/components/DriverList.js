@@ -61,14 +61,40 @@ function TripProposal({
 				>
 			</section>
 			<section>
-				<span className="name">${Prénom} ${!privateMode && Nom}</span>
+				<span className="name"
+					>${Prénom}${' '}
+					${privateMode
+						? Nom
+						: html`
+								<${PrivateName} name=${Nom} />
+						  `}
+				</span>
 				<span className="proposed-trip">
 					${Départ} - ${Arrivée} -
 					<span className="datetime">${Jours} - Heure: ${heureDépart}</span>
 				</span>
-				<${Contact} ...${{ phone, email }} />
+				${privateMode
+					? html`
+							<${Contact} ...${{ phone, email }} />
+					  `
+					: html`
+							<${StandardContact} />
+					  `}
 			</section>
 		</li>
+	`
+}
+
+const PrivateName = ({ name }) => {
+	const privateName = name && name[0].toUpperCase()
+	return html`
+		<span>${privateName}.</span>
+	`
+}
+
+const StandardContact = ({}) => {
+	return html`
+		<a href="tel:0531600903">appeler Lotocar</a>
 	`
 }
 
