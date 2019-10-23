@@ -69,16 +69,16 @@ function TripProposal({
 					${Départ} - ${Arrivée} -
 					<span className="datetime">${Jours} - Heure: ${heureDépart}</span>
 				</span>
-				<span className="contact">
-					<a href="${phoneLink}"
-						>${phone ? phone.trim() : `(pas de téléphone)`}</a
-					>
-					<a href="${emailLink}"
-						>${email && email.includes('@') ? `email` : `(pas d'email)`}</a
-					>
-				</span>
+				<${StandardContact} />
 			</section>
 		</li>
+	`
+}
+
+const StandardContact = ({}) => {
+	const tel = '0531600903'
+	return html`
+		<a href="tel:${tel}">appeler Lotocar (${tel})</a>
 	`
 }
 

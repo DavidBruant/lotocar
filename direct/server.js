@@ -47,7 +47,8 @@ app.get('/driver-trip-proposals', (req, res) => {
 				} = driverTripProposal
 
 				const driver = Object.freeze({
-					Prénom
+					Prénom,
+					Nom: Nom && Nom[0].toUpperCase() + '.'
 				})
 
 				tripProposals.push({
