@@ -115,6 +115,7 @@ export default function DriversList({
 				return tripProposals.map((tripProposal, j) => {
 					return html`
 						<${TripProposal}
+							key=${JSON.stringify(tripProposal)}
 							tripProposal=${tripProposal}
 							tripDetails=${tripDetails}
 							isDisplayed=${displayedDriverTrips.has(trip)}
