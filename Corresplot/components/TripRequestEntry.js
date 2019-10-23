@@ -28,28 +28,7 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 			destination
 		})
 	}
-
-	const status = tripRequest[ASYNC_STATUS]
-	const asyncMessage =
-		status === STATUS_PENDING
-			? 'Recherche en cours...'
-			: status === STATUS_ERROR
-			? html`
-					<div
-						style=${{
-							background: '#ffd8d8',
-							padding: '.4rem 1rem',
-							borderRadius: '1rem',
-							margin: '.6rem'
-						}}
-					>
-						Erreur lors de votre recherche. <br />Êtes-vous sûr que ces villes
-						existent ?
-					</div>
-			  `
-			: status === STATUS_VALUE
-			? 'Merveilleux !'
-			: null
+	let requestStatus = tripRequest[ASYNC_STATUS]
 
 	return html`
 		<h2 key="h2">Demande de trajet</h2>
@@ -76,7 +55,32 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 			</section>
 
 			<button type="submit">Ok</button>
-			<div className="status">${asyncMessage}</div>
+			${requestStatus !== STATUS_VALUE &&
+				html`
+					<${RequestStatus} status=${requestStatus} />
+				`}
 		</form>
 	`
 }
+
+const RequestStatus = ({ status }) => html`
+	<div className="status">
+		${status === STATUS_PENDING
+			? 'Recherche en cours...'
+			: status === STATUS_ERROR
+			? html`
+					<div
+						style=${{
+							background: '#ffd8d8',
+							padding: '.4rem 1rem',
+							borderRadius: '1rem',
+							margin: '.6rem'
+						}}
+					>
+						Erreur lors de votre recherche. <br />Êtes-vous sûr que ces villes
+						existent ?
+					</div>
+			  `
+			: undefined}
+	</div>
+`
