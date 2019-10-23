@@ -14,16 +14,20 @@ export default function({
 	displayedDriverTrips,
 	positionByPlace,
 	onTripRequestChange,
-	onTripClick
+	onTripClick,
+	privateMode = false
 }) {
 	return html`
 		<main>
-			<${Map}
-				directionsByTrip=${directionsByTrip}
-				tripRequest=${tripRequest}
-				displayedDriverTrips=${displayedDriverTrips}
-				positionByPlace=${positionByPlace}
-			/>
+			${privateMode &&
+				html`
+					<${Map}
+						directionsByTrip=${directionsByTrip}
+						tripRequest=${tripRequest}
+						displayedDriverTrips=${displayedDriverTrips}
+						positionByPlace=${positionByPlace}
+					/>
+				`}
 			<${TripSelection}
 				tripProposalsByTrip=${tripProposalsByTrip}
 				tripRequest=${tripRequest}
