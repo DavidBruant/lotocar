@@ -60,34 +60,6 @@ app.get('/positions', (req, res) => {
 	}
 })
 
-app.get('/directions', (req, res) => {
-	const googleAPIKey = process.env.GOOGLE_API_KEY
-	const { origin, destination } = req.query
-
-	const googleDirectionsAPIURL = `https://maps.googleapis.com/maps/api/directions/json?origin=${encodeURIComponent(
-		origin
-	)}&destination=${encodeURIComponent(
-		destination
-	)}&mode=driving&units=metric&region=fr&key=${googleAPIKey}`
-
-	memzGot(googleDirectionsAPIURL)
-		.then(({ statusCode, body }) =>
-			res
-				.status(statusCode)
-				.set('Content-Type', 'application/json')
-				.send(body)
-		)
-		.catch(({ statusCode, body }) => {
-			res.status(statusCode).send(body)
-		})
-})
-
-app.get('/requests', (req, res) => {
-	getRequests()
-		.then(requests => res.json(requests))
-		.catch(err => res.status(500).send(err))
-})
-
 app.listen(PORT, () =>
 	console.log(`L'application directe écoute sur le port ${PORT}!`)
 )
