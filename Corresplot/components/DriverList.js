@@ -1,5 +1,6 @@
 import React from 'react'
 import htm from 'htm'
+import classNames from 'classnames'
 
 const html = htm.bind(React.createElement)
 
@@ -50,10 +51,11 @@ function TripProposal({
 	// in minutes, assuming average 60km/h
 	const additionalTime = additionalDistanceKM * AVERAGE_SPEED
 
-	const driverClassName = 'driver' + (isDisplayed ? ' displayed' : '')
-
 	return html`
-		<li className=${driverClassName} onClick=${onDriverClick}>
+		<li
+			className=${classNames('driver', { displayed: isDisplayed })}
+			onClick=${onDriverClick}
+		>
 			<section className="${detourClassName} trip-details">
 				<span
 					>${tripDetails
