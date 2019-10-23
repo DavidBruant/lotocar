@@ -19,7 +19,60 @@ app.use(express.static(__dirname))
 app.get('/', (req, res) => res.redirect('/Corresplot/'))
 
 app.get('/driver-trip-proposals', (req, res) => {
-	getDrivers().then(drivers => res.json(drivers))
+	getDrivers()
+		.then(function cleanupDriverTripProposals(driverTripProposals) {
+			for (const driverTripProposal of driverTripProposals) {
+				driverTripProposal['Départ'] = driverTripProposal['Départ'].trim()
+				driverTripProposal['Arrivée'] = driverTripProposal['Arrivée'].trim()
+			}
+			return driverTripProposals
+		})
+		.then(function driverTripProposalsToTripProposals(driverTripProposals) {
+			const tripProposals = []
+
+			for (const driverTripProposal of driverTripProposals) {
+				const {
+					Départ,
+					Arrivée,
+					Trajet,
+					Jours,
+					'Heure départ': HeureDépart,
+					'Heure retour': HeureRetour,
+					Adresse,
+					Prénom,
+					Nom,
+					'N° de téléphone': tel,
+					'Adresse e-mail': email,
+					'Contact préféré': favContact
+				} = driverTripProposal
+
+				const driver = Object.freeze({
+					Prénom
+				})
+
+				tripProposals.push({
+					Départ,
+					Arrivée,
+					Trajet,
+					Jours,
+					'Heure départ': HeureDépart,
+					driver
+				})
+
+				if (HeureRetour) {
+					tripProposals.push({
+						Départ: Arrivée,
+						Arrivée: Départ,
+						Trajet: undefined, // should be the reverse Trajet. Will this ever matter?
+						Jours,
+						'Heure départ': HeureRetour,
+						driver
+					})
+				}
+			}
+
+			res.json(tripProposals)
+		})
 })
 
 app.get('/positions', (req, res) => {

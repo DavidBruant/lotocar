@@ -6,7 +6,7 @@ import { json } from 'd3-fetch'
 
 import Main from './components/Main.js'
 
-import { makeTrip as driverTripProposalToTrip } from '../geography/driverToTrip'
+import { makeTrip } from '../geography/driverToTrip'
 import computeTripDetails from '../geography/computeTripDetails'
 
 import _actions from './actions.js'
@@ -107,66 +107,16 @@ console.log(store.state)
 // initial render
 renderUI(store)
 
-json('/driver-trip-proposals')
-	.then(function cleanupDriverTripProposals(driverTripProposals) {
-		for (const driverTripProposal of driverTripProposals) {
-			driverTripProposal['Départ'] = driverTripProposal['Départ'].trim()
-			driverTripProposal['Arrivée'] = driverTripProposal['Arrivée'].trim()
-		}
-		return driverTripProposals
-	})
-	.then(function driverTripProposalsToTripProposals(driverTripProposals) {
-		const tripProposalsByTrip = new Map()
+json('/driver-trip-proposals').then(tripProposals => {
+	const tripProposalsByTrip = new Map()
 
-		for (const driverTripProposal of driverTripProposals) {
-			const {
-				Départ,
-				Arrivée,
-				Trajet,
-				Jours,
-				'Heure départ': HeureDépart,
-				'Heure retour': HeureRetour,
-				Adresse,
-				Prénom,
-				Nom,
-				'N° de téléphone': tel,
-				'Adresse e-mail': email,
-				'Contact préféré': favContact
-			} = driverTripProposal
+	for (const tripProposal of tripProposals) {
+		const trip = makeTrip(tripProposal.Départ, tripProposal.Arrivée)
+		const currentEntries = tripProposalsByTrip.get(trip) || []
 
-			const driver = Object.freeze({
-				Adresse,
-				Prénom,
-				Nom,
-				'N° de téléphone': tel,
-				'Adresse e-mail': email,
-				'Contact préféré': favContact
-			})
-
-			const mainTrip = driverTripProposalToTrip(Départ, Arrivée)
-			const mainTripProposals = tripProposalsByTrip.get(mainTrip) || []
-			mainTripProposals.push({
-				Départ,
-				Arrivée,
-				Trajet,
-				Jours,
-				'Heure départ': HeureDépart,
-				driver
-			})
-			tripProposalsByTrip.set(mainTrip, mainTripProposals)
-
-			const returnTrip = driverTripProposalToTrip(Arrivée, Départ)
-			const returnTripProposals = tripProposalsByTrip.get(returnTrip) || []
-			returnTripProposals.push({
-				Départ: Arrivée,
-				Arrivée: Départ,
-				Trajet: undefined, // should be the reverse Trajet. Will this ever matter?
-				Jours,
-				'Heure départ': HeureRetour,
-				driver
-			})
-			tripProposalsByTrip.set(returnTrip, returnTripProposals)
-		}
-
-		store.mutations.addTripProposals(tripProposalsByTrip)
-	})
+		currentEntries.push(tripProposal)
+		tripProposalsByTrip.set(trip, currentEntries)
+	}
+	debugger
+	store.mutations.addTripProposals(tripProposalsByTrip)
+})
