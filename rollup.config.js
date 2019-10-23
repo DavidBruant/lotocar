@@ -1,22 +1,57 @@
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import { terser } from 'rollup-plugin-terser';
+import resolve from 'rollup-plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs'
+import { terser } from 'rollup-plugin-terser'
 import replace from 'rollup-plugin-replace'
+import babel from 'rollup-plugin-babel'
 
-const production = !process.env.ROLLUP_WATCH;
+const production = !process.env.ROLLUP_WATCH
 
-function makePlugins(){ 
+function makePlugins() {
 	return [
-		resolve(), 
+		resolve(),
 		commonjs({
 			namedExports: {
 				// react
-				'node_modules/react/index.js': ['createElement', 'createContext', 'forwardRef', 'useContext', 'Component', 'Fragment', 'Children', 'cloneElement', 'useState', 'useEffect'],
+				'node_modules/react/index.js': [
+					'createElement',
+					'createContext',
+					'forwardRef',
+					'useContext',
+					'Component',
+					'Fragment',
+					'Children',
+					'cloneElement',
+					'useState',
+					'useEffect'
+				],
 				// react-dom
 				'node_modules/react-dom/index.js': ['createPortal', 'render'],
 				// leaflet
-				'node_modules/leaflet/dist/leaflet-src.js': ['Control', 'Circle', 'CircleMarker', 'DomUtil', 'FeatureGroup', 'GeoJSON', 'GridLayer', 'ImageOverlay', 'latLngBounds', 'LayerGroup', 'Map', 'Marker', 'Polygon', 'Polyline', 'Popup', 'Rectangle', 'TileLayer', 'Tooltip', 'VideoOverlay']
+				'node_modules/leaflet/dist/leaflet-src.js': [
+					'Control',
+					'Circle',
+					'CircleMarker',
+					'DomUtil',
+					'FeatureGroup',
+					'GeoJSON',
+					'GridLayer',
+					'ImageOverlay',
+					'latLngBounds',
+					'LayerGroup',
+					'Map',
+					'Marker',
+					'Polygon',
+					'Polyline',
+					'Popup',
+					'Rectangle',
+					'TileLayer',
+					'Tooltip',
+					'VideoOverlay'
+				]
 			}
+		}),
+		babel({
+			exclude: 'node_modules/**' // only transpile our source code
 		}),
 		replace({ 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV) }),
 		production && terser()
