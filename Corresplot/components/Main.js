@@ -35,6 +35,7 @@ export default function({
 				displayedDriverTrips=${displayedDriverTrips}
 				onTripRequestChange=${onTripRequestChange}
 				onTripClick=${onTripClick}
+				privateMode=${privateMode}
 			/>
 		</main>
 	`

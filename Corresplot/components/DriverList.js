@@ -12,7 +12,8 @@ function TripProposal({
 	tripProposal,
 	tripDetails,
 	isDisplayed,
-	onDriverClick
+	onDriverClick,
+	privateMode
 }) {
 	const {
 		Départ,
@@ -21,10 +22,6 @@ function TripProposal({
 		'Heure départ': heureDépart,
 		driver: { Prénom, Nom, 'N° de téléphone': phone, 'Adresse e-mail': email }
 	} = tripProposal
-
-	const phoneLink = phone ? `tel:${phone.trim()}` : undefined
-	const emailLink =
-		email && email.includes('@') ? `mailto:${email.trim()}` : undefined
 
 	let originalDistance,
 		distanceWithDetour,
@@ -64,21 +61,28 @@ function TripProposal({
 				>
 			</section>
 			<section>
-				<span className="name">${Prénom} ${Nom}</span>
+				<span className="name">${Prénom} ${!privateMode && Nom}</span>
 				<span className="proposed-trip">
 					${Départ} - ${Arrivée} -
 					<span className="datetime">${Jours} - Heure: ${heureDépart}</span>
 				</span>
-				<span className="contact">
-					<a href="${phoneLink}"
-						>${phone ? phone.trim() : `(pas de téléphone)`}</a
-					>
-					<a href="${emailLink}"
-						>${email && email.includes('@') ? `email` : `(pas d'email)`}</a
-					>
-				</span>
+				<${Contact} ...${{ phone, email }} />
 			</section>
 		</li>
+	`
+}
+
+const Contact = ({ phone, email }) => {
+	const phoneLink = phone ? `tel:${phone.trim()}` : undefined
+	const emailLink =
+		email && email.includes('@') ? `mailto:${email.trim()}` : undefined
+	return html`
+		<span className="contact">
+			<a href="${phoneLink}">${phone ? phone.trim() : `(pas de téléphone)`}</a>
+			<a href="${emailLink}">
+				${email && email.includes('@') ? `email` : `(pas d'email)`}
+			</a>
+		</span>
 	`
 }
 
@@ -87,7 +91,8 @@ export default function DriversList({
 	tripRequest,
 	tripDetailsByTrip,
 	displayedDriverTrips,
-	onTripClick
+	onTripClick,
+	privateMode
 }) {
 	const orderedTrips = [...tripProposalsByTrip.keys()].sort((trip1, trip2) => {
 		const details1 = tripDetailsByTrip.get(trip1) || {
@@ -120,6 +125,7 @@ export default function DriversList({
 							tripDetails=${tripDetails}
 							isDisplayed=${displayedDriverTrips.has(trip)}
 							onDriverClick=${() => onTripClick(trip)}
+							privateMode=${privateMode}
 						/>
 					`
 				})

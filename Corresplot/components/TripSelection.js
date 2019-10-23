@@ -12,7 +12,8 @@ export default function({
 	tripDetailsByTrip,
 	displayedDriverTrips,
 	onTripRequestChange,
-	onTripClick
+	onTripClick,
+	privateMode
 }) {
 	return html`
 		<section className="trip-selection">
@@ -26,6 +27,7 @@ export default function({
 				tripDetailsByTrip=${tripDetailsByTrip}
 				displayedDriverTrips=${displayedDriverTrips}
 				onTripClick=${onTripClick}
+				privateMode=${privateMode}
 			/>
 		</section>
 	`
