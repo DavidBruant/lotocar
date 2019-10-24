@@ -79,7 +79,7 @@ app.get('/requests', (req, res) => {
     .catch(err => res.status(500).send(err))
 })
 
-app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
+app.listen(PORT, () => console.log(`L'application outil métier écoute sur le port ${PORT}!`))
 
 
 
