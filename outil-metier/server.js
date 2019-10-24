@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 39528
 
 const memzGot = memoize(url => got(url))
 
-app.use(express.static('.'))
+app.use(express.static(__dirname))
 
 app.get('/', (req, res) => res.redirect('/Corresplot/'))
 
