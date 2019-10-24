@@ -3,11 +3,11 @@ import got from 'got'
 
 import memoize from 'fast-memoize';
 
-import getDrivers from './spreadsheetDatabase/getDrivers.js'
-import getRequests from './spreadsheetDatabase/getRequests.js'
-import getLotocarPositionByPlace from './spreadsheetDatabase/getLotocarPositionByPlace.js'
-import positionByPlace from './geography/positionByPlace.js';
-import getPlacesPosition from './server/getPlacesPosition.js';
+import getDrivers from '../spreadsheetDatabase/getDrivers.js'
+import getRequests from '../spreadsheetDatabase/getRequests.js'
+import getLotocarPositionByPlace from '../spreadsheetDatabase/getLotocarPositionByPlace.js'
+import positionByPlace from '../geography/positionByPlace.js';
+import getPlacesPosition from '../server/getPlacesPosition.js';
 
 const app = express()
 const PORT = process.env.PORT || 39528
