@@ -58,9 +58,8 @@ function TripProposal({
 		>
 			<section className="${detourClassName} trip-details">
 				<span
-					>${tripDetails
-						? `+${Math.ceil(additionalTime)}mins`
-						: undefined}</span
+					>${tripDetails && 'détour'}<br />
+					${tripDetails ? `${Math.ceil(additionalTime)}mins` : undefined}</span
 				>
 			</section>
 			<section>
