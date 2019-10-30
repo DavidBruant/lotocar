@@ -27,81 +27,75 @@ const searchCity = (input, setOptions) =>
 			setOptions([])
 		})
 
+const CityInput = ({ label, input, setInput }) => {
+	const [options, setOptions] = useState([])
+
+	return html`
+		<div>
+			<label>
+				<strong>${label}</strong>
+				<input
+					type="text"
+					value=${input.text}
+					onChange=${e => {
+						const value = e.target.value
+						setInput({ text: value, validated: false })
+						if (value.length > 2) searchCity(e.target.value, setOptions)
+						// Vérifier qu'aucune ville n'est exclue : https://fr.wikipedia.org/wiki/Liste_de_toponymes_courts
+					}}
+				/>
+				${input.validated && '✔'}
+			</label>
+			${!input.validated &&
+				html`
+					<${Options} options=${options} onClick=${setInput} />
+				`}
+		</div>
+	`
+}
 export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
-	const [origin, setOrigin] = useState(tripRequest.origin)
-	const [destination, setDestination] = useState(tripRequest.destination)
-	const [originOptions, setOriginOptions] = useState([])
-	const [destinationOptions, setDestinationOptions] = useState([])
+	const [origin, setOrigin] = useState({ text: '', validated: false })
+	const [destination, setDestination] = useState({ text: '', validated: false })
 
-	// pass new trip to state if it came from props
 	useEffect(() => {
-		setOrigin(tripRequest.origin)
-	}, [tripRequest.origin])
-	useEffect(() => {
-		setDestination(tripRequest.destination)
-	}, [tripRequest.destination])
+		origin.validated &&
+			destination.validated &&
+			onTripRequestChange({
+				origin: origin.text,
+				destination: destination.text
+			})
+	}, [origin, destination])
 
-	function onSubmit(e) {
-		e.preventDefault()
-		onTripRequestChange({
-			origin,
-			destination
-		})
-	}
 	let requestStatus = tripRequest[ASYNC_STATUS]
 
 	return html`
 		<h2 key="h2">Demande de trajet</h2>
-		<form key="form" className="trip-request-entry" onSubmit=${onSubmit}>
+		<form key="form" className="trip-request-entry">
 			<section className="geography">
-				<label>
-					<strong>Départ</strong>
-					<input
-						className="origin"
-						type="text"
-						onChange=${e => {
-							const value = e.target.value
-							if (value.length > 2) searchCity(e.target.value, setOriginOptions)
-						}}
-					/>
-				</label>
-				${!origin &&
-					html`
-						<${Options} options=${originOptions} onClick=${setOrigin} />
-					`}
-				<label>
-					<strong>Arrivée</strong>
-					<input
-						className="destination"
-						type="text"
-						onChange=${e => {
-							const value = e.target.value
-							if (value.length > 2)
-								searchCity(e.target.value, setDestinationOptions)
-						}}
-					/>
-				</label>
-				${!destination &&
-					html`
-						<${Options}
-							options=${destinationOptions}
-							onClick=${setDestination}
-						/>
-					`}
+				<${CityInput} label="Départ" input=${origin} setInput=${setOrigin} />
+				<${CityInput}
+					label="Arrivée"
+					input=${destination}
+					setInput=${setDestination}
+				/>
 			</section>
 		</form>
 	`
 }
 
 const Options = ({ options, onClick }) =>
-	console.log('incomptop', options) ||
 	html`
-		<ul>
+		<ul style=${{ width: '100%', textAlign: 'center' }}>
 			${take(
 				options.map(
 					({ nom, departement }) =>
 						html`
-							<li onClick=${nom => onClick(nom)}>
+							<li
+								style=${{
+									cursor: 'pointer'
+								}}
+								onClick=${() => onClick({ text: nom, validated: true })}
+							>
 								<span> ${nom}</span
 								><span
 									style=${{
