@@ -102,7 +102,16 @@ const Options = ({ options, onClick }) =>
 					({ nom, departement }) =>
 						html`
 							<li onClick=${nom => onClick(nom)}>
-								${nom + (departement ? ' (' + departement.nom + ')' : '')}
+								<span> ${nom}</span
+								><span
+									style=${{
+										color:
+											departement && departement.nom === 'Lot'
+												? 'green'
+												: 'orange'
+									}}
+									>${departement ? ' (' + departement.nom + ')' : ''}
+								</span>
 							</li>
 						`
 				),
