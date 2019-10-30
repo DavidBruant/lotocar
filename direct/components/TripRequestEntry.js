@@ -85,7 +85,7 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 
 const Options = ({ options, onClick }) =>
 	html`
-		<ul style=${{ width: '100%', textAlign: 'center' }}>
+		<ul style=${{ width: '100%' }}>
 			${take(
 				options.map(
 					({ nom, departement }) =>
