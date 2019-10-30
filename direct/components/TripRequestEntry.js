@@ -6,12 +6,32 @@ import {
 	STATUS_ERROR,
 	STATUS_VALUE
 } from '../asyncStatusHelpers'
+import { take } from 'lodash-es'
 
 const html = htm.bind(React.createElement)
+
+const searchCity = (input, setOptions) =>
+	fetch(
+		`https://geo.api.gouv.fr/communes?nom=${input}&fields=nom,code,departement,region&boost=population`
+	)
+		.then(response => {
+			if (!response.ok) return setOptions([])
+			return response.json()
+		})
+		.then(json => setOptions(json))
+		.catch(function(error) {
+			console.log(
+				'Erreur dans la recherche de communes à partir du code postal',
+				error
+			)
+			setOptions([])
+		})
 
 export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 	const [origin, setOrigin] = useState(tripRequest.origin)
 	const [destination, setDestination] = useState(tripRequest.destination)
+	const [originOptions, setOriginOptions] = useState([])
+	const [destinationOptions, setDestinationOptions] = useState([])
 
 	// pass new trip to state if it came from props
 	useEffect(() => {
@@ -39,29 +59,57 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 					<input
 						className="origin"
 						type="text"
-						value=${origin}
-						onChange=${e => setOrigin(e.target.value)}
+						onChange=${e => {
+							const value = e.target.value
+							if (value.length > 2) searchCity(e.target.value, setOriginOptions)
+						}}
 					/>
 				</label>
+				${!origin &&
+					html`
+						<${Options} options=${originOptions} onClick=${setOrigin} />
+					`}
 				<label>
 					<strong>Arrivée</strong>
 					<input
 						className="destination"
 						type="text"
-						value=${destination}
-						onChange=${e => setDestination(e.target.value)}
+						onChange=${e => {
+							const value = e.target.value
+							if (value.length > 2)
+								searchCity(e.target.value, setDestinationOptions)
+						}}
 					/>
 				</label>
+				${!destination &&
+					html`
+						<${Options}
+							options=${destinationOptions}
+							onClick=${setDestination}
+						/>
+					`}
 			</section>
-
-			<button type="submit">Ok</button>
-			${requestStatus !== STATUS_VALUE &&
-				html`
-					<${RequestStatus} status=${requestStatus} />
-				`}
 		</form>
 	`
 }
+
+const Options = ({ options, onClick }) =>
+	console.log('incomptop', options) ||
+	html`
+		<ul>
+			${take(
+				options.map(
+					({ nom, departement }) =>
+						html`
+							<li onClick=${nom => onClick(nom)}>
+								${nom + (departement ? ' (' + departement.nom + ')' : '')}
+							</li>
+						`
+				),
+				5
+			)}
+		</ul>
+	`
 
 const RequestStatus = ({ status }) => html`
 	<div className="status">
