@@ -98,7 +98,7 @@ const Options = ({ options, onClick }) =>
 										color:
 											departement && departement.nom === 'Lot'
 												? 'green'
-												: 'orange'
+												: 'grey'
 									}}
 									>${departement ? ' (' + departement.nom + ')' : ''}
 								</span>
