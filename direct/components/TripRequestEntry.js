@@ -6,21 +6,17 @@ import {
 	STATUS_ERROR,
 	STATUS_VALUE
 } from '../asyncStatusHelpers'
-import { take } from 'lodash-es'
+import { json } from 'd3-fetch'
 
 const html = htm.bind(React.createElement)
 
 const searchCity = (input, setOptions) =>
-	fetch(
+	json(
 		`https://geo.api.gouv.fr/communes?nom=${input}&fields=nom,code,departement,region&boost=population`
 	)
-		.then(response => {
-			if (!response.ok) return setOptions([])
-			return response.json()
-		})
 		.then(json => setOptions(json))
 		.catch(function(error) {
-			console.log(
+			console.error(
 				'Erreur dans la recherche de communes à partir du code postal',
 				error
 			)
@@ -86,8 +82,8 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 const Options = ({ options, onClick }) =>
 	html`
 		<ul style=${{ width: '100%' }}>
-			${take(
-				options.map(
+			${options
+				.map(
 					({ nom, departement }) =>
 						html`
 							<li
@@ -108,9 +104,8 @@ const Options = ({ options, onClick }) =>
 								</span>
 							</li>
 						`
-				),
-				5
-			)}
+				)
+				.slice(0, 5)}
 		</ul>
 	`
 
