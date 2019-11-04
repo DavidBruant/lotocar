@@ -65,7 +65,7 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 	let requestStatus = tripRequest[ASYNC_STATUS]
 
 	return html`
-		<h2 key="h2">Demande de trajet</h2>
+		<h2 key="h2">Où allez-vous ?</h2>
 		<form key="form" className="trip-request-entry">
 			<section className="geography">
 				<${CityInput} label="Départ" input=${origin} setInput=${setOrigin} />
