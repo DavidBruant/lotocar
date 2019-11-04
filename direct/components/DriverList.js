@@ -83,7 +83,7 @@ const StandardContact = ({}) => {
 
 export default function DriversList({
 	tripProposalsByTrip,
-	tripRequest,
+	validTripRequest,
 	tripDetailsByTrip,
 	displayedDriverTrips,
 	onTripClick
@@ -104,6 +104,18 @@ export default function DriversList({
 		return detour1 - detour2
 	})
 
+	if (!orderedTrips.length) return null
+	if (!validTripRequest)
+		return html`
+			<div style=${{ textAlign: 'center', marginTop: '2rem' }}>
+				<p style=${{ marginBottom: '0rem' }}>
+					${orderedTrips.length} trajets disponibles sur Lotocar
+				</p>
+				<a href="http://bit.ly/inscription-conducteur"
+					>J'ai une voiture et je veux aider</a
+				>
+			</div>
+		`
 	return html`
 		<h2 key="h2">Conducteur.rice.s</h2>
 		<ul key="ul" className="drivers-list">
