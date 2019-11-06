@@ -16,15 +16,18 @@ import getPlacesPosition from '../server/getPlacesPosition.js'
 
 const app = express()
 const PORT = process.env.PORT || 39528
-
+const devMode = process.env.NODE_ENV === 'development'
 const memzGot = memoize(url => got(url))
 
-app.use(
-	middleware(compiler, {
-		hot: true
-		// webpack-dev-middleware options
-	})
-)
+if (devMode) {
+	app.use(
+		middleware(compiler, {
+			hot: true,
+			publicPath: '/build/'
+			// webpack-dev-middleware options
+		})
+	)
+}
 
 app.use(express.static(__dirname))
 
@@ -126,7 +129,8 @@ app.get('/positions', (req, res) => {
 	}
 })
 
-app.use(require('webpack-hot-middleware')(compiler))
+if (devMode) app.use(require('webpack-hot-middleware')(compiler))
+
 app.listen(PORT, () =>
 	console.log(`L'application directe écoute sur le port ${PORT}!`)
 )

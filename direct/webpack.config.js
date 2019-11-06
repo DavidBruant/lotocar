@@ -1,5 +1,9 @@
+// You can't use import statements here
 let webpack = require('webpack')
 let path = require('path')
+
+let devMode = process.env.NODE_ENV === 'development'
+
 module.exports = {
 	module: {
 		rules: [
@@ -26,16 +30,15 @@ module.exports = {
 			}
 		]
 	},
-	mode: 'development',
-	devServer: {
-		contentBase: './build',
-		hot: true
-	},
-	entry: ['webpack-hot-middleware/client', path.resolve(__dirname, 'main.js')],
+	mode: devMode ? 'development' : 'production',
+	entry: [
+		...(devMode ? ['webpack-hot-middleware/client'] : []),
+		path.resolve(__dirname, 'main.js')
+	],
 	output: {
 		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'direct/build'),
-		publicPath: '/'
+		path: path.resolve(__dirname, 'build'),
+		publicPath: '/build/'
 	},
-	plugins: [new webpack.HotModuleReplacementPlugin()]
+	plugins: [...(devMode ? [new webpack.HotModuleReplacementPlugin()] : [])]
 }
