@@ -6,7 +6,7 @@
 	"scripts": {
 		"start:outil-metier": "(cp outil-metier/Procfile .; cp outil-metier/.env .;NODE_ENV=development& node -r esm direct/server.js)",
 		"start:direct": "(cp direct/Procfile .; cp direct/.env .; heroku local)",
-		"build": "webpack --mode production",
+		"build": "",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"engines": {
