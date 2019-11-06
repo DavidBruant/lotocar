@@ -88,17 +88,18 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 
 const Options = ({ options, onClick }) =>
 	html`
-		<ul style=${{ width: '100%' }}>
+		<${styled.ul`
+			list-style-type: none;
+			padding-left: 1rem;
+			li {
+				cursor: pointer;
+			}
+		`} style=${{ width: '100%' }}>
 			${options
 				.map(
 					({ nom, departement }) =>
 						html`
-							<li
-								style=${{
-									cursor: 'pointer'
-								}}
-								onClick=${() => onClick({ text: nom, validated: true })}
-							>
+							<li onClick=${() => onClick({ text: nom, validated: true })}>
 								<span> ${nom}</span
 								><span
 									style=${{
