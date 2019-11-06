@@ -53,7 +53,16 @@ function TripProposal({
 	const additionalTime = additionalDistanceKM * AVERAGE_SPEED
 
 	return html`
-		<li
+		<${styled.li`
+			display: flex;
+			flex-direction: row;
+			justify-content: left;
+			align-items: center;
+			padding: 0.3em;
+			background: #8fc7ed33;
+			margin: 1rem;
+			border-radius: 1rem;
+		`}
 			className=${classNames('driver', { displayed: isDisplayed })}
 			onClick=${onDriverClick}
 		>
