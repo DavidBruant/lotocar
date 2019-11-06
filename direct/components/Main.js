@@ -58,12 +58,20 @@ let Main = function({
 					background: #4682b4;
 					color: white;
 					padding: 0.3rem 1rem;
+					a {
+						color: inherit;
+						text-decoration: underline;
+					}
+					text-align: center;
 				`}>
-				<h2>Nous contacter</h2>
-			<div>
-				Email : contact@lotocar.fr
-			</div><div>
-Tél : 05 31 60 09 03</div></section>
+					<div>
+						Email : contact@lotocar.fr
+					</div>
+					<div>
+						Tél : 05 31 60 09 03
+					</div>
+					<div><a href="https://6b49e0e7-23a4-497b-931e-cb12669b2b05.filesusr.com/ugd/8db2ce_bfddb80831494ecc832301c3a4dc0105.pdf">Conditions générales d'utilisation</a></div>
+				</section>
 			</footer>
 		</main>
 	`
