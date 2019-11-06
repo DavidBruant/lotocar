@@ -18,7 +18,16 @@ let Main = function({
 	onTripClick
 }) {
 	return html`
-		<main>
+		<${styled.main`
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+
+			header,
+			footer {
+				flex-shrink: 0;
+			}
+		`}>
 			<${styled.header`
 				display: flex;
 				justify-content: center;
@@ -27,10 +36,15 @@ let Main = function({
 				img {
 					margin: 1rem;
 				}
+				border-bottom: 1px solid #4682b438;
 			`}>
 				<img src=${logo} width="79px" height="79px" />
 				<img src=${logoLot} width="79px" height="79px" />
 			</header>
+			<${styled.div`
+				flex-grow: 1;
+				margin-top: 1rem;
+			`}>
 			<${TripSelection}
 				tripProposalsByTrip=${tripProposalsByTrip}
 				tripRequest=${tripRequest}
@@ -38,11 +52,18 @@ let Main = function({
 				displayedDriverTrips=${displayedDriverTrips}
 				onTripRequestChange=${onTripRequestChange}
 				onTripClick=${onTripClick}
-			/>
+			/></div>
 			<footer>
 				<${styled.section`
 					background: #4682b4;
-				`}>Nous contacter</section>
+					color: white;
+					padding: 0.3rem 1rem;
+				`}>
+				<h2>Nous contacter</h2>
+			<div>
+				Email : contact@lotocar.fr
+			</div><div>
+Tél : 05 31 60 09 03</div></section>
 			</footer>
 		</main>
 	`

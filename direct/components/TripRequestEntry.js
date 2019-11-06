@@ -71,7 +71,7 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 	return html`
 		<${styled.h2`
 			text-align: center;
-			margin: 0 0 1rem;
+			margin: 0 0 1.5rem;
 		`}>Où allez-vous ?</h2>
 		<form key="form" className="trip-request-entry">
 			<section className="geography">
