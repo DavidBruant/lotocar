@@ -39,6 +39,11 @@ let Main = function({
 				onTripRequestChange=${onTripRequestChange}
 				onTripClick=${onTripClick}
 			/>
+			<footer>
+				<${styled.section`
+					background: #4682b4;
+				`}>Nous contacter</section>
+			</footer>
 		</main>
 	`
 }
