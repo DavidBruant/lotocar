@@ -117,7 +117,7 @@ export default function DriversList({
 			</div>
 		`
 	return html`
-		<h2 key="h2">Conducteur.rice.s</h2>
+		<h2 key="h2">Conducteur.rice.s correspondant à votre demande</h2>
 		<ul key="ul" className="drivers-list">
 			${orderedTrips.map(trip => {
 				const tripProposals = tripProposalsByTrip.get(trip)
