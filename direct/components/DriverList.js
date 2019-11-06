@@ -61,8 +61,9 @@ function TripProposal({
 			padding: 0.5em;
 			background: #8fc7ed33;
 			margin: 1rem;
-
 			border-radius: 1rem;
+			box-shadow: 0 1px 3px rgba(41, 117, 209, 0.12),
+				0 1px 2px rgba(41, 117, 209, 0.24);
 		`}
 			className=${classNames('driver', { displayed: isDisplayed })}
 			onClick=${onDriverClick}
