@@ -75,8 +75,12 @@ function TripProposal({
 			<section>
 				<span className="name">${Prénom} ${Nom}</span>
 				<span className="proposed-trip">
-					${Départ} - ${Arrivée} -
-					<span className="datetime">${Jours} - Heure: ${heureDépart}</span>
+					${Départ} - ${Arrivée}
+					${Jours &&
+						html`
+							<div className="datetime">🗓️ ${Jours}</div>
+						`}				
+					<div className="datetime">⌚ ${heureDépart}</div>
 				</span>
 				<${StandardContact} />
 			</section>
