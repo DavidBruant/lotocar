@@ -87,7 +87,7 @@ function TripProposal({
 const StandardContact = ({}) => {
 	const tel = '0531600903'
 	return html`
-		<a href="tel:${tel}">appeler Lotocar (${tel})</a>
+		<a href="tel:${tel}">Lotocar (${tel})</a>
 	`
 }
 
