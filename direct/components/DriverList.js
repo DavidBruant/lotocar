@@ -144,7 +144,7 @@ export default function DriversList({
 			text-align: center;
 		`} key="h2">Conducteur.rice.s</h2>
 		<ul key="ul" className="drivers-list">
-			${orderedTrips.map(trip => {
+			${orderedTrips.slice(0, 10).map(trip => {
 				const tripProposals = tripProposalsByTrip.get(trip)
 				const tripDetails = tripDetailsByTrip.get(trip)
 
