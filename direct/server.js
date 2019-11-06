@@ -3,6 +3,7 @@ import got from 'got'
 
 import webpack from 'webpack'
 import middleware from 'webpack-dev-middleware'
+import hotMiddleware from 'webpack-hot-middleware'
 import config from './webpack.config.js'
 const compiler = webpack(config)
 import memoize from 'fast-memoize'
@@ -17,14 +18,13 @@ const app = express()
 const PORT = process.env.PORT || 39528
 
 const memzGot = memoize(url => got(url))
-console.log(process.env.NODE_ENV)
 
-if (true || process.env.NODE_ENV === 'development')
-	app.use(
-		middleware(compiler, {
-			// webpack-dev-middleware options
-		})
-	)
+app.use(
+	middleware(compiler, {
+		hot: true
+		// webpack-dev-middleware options
+	})
+)
 
 app.use(express.static(__dirname))
 
@@ -126,6 +126,7 @@ app.get('/positions', (req, res) => {
 	}
 })
 
+app.use(require('webpack-hot-middleware')(compiler))
 app.listen(PORT, () =>
 	console.log(`L'application directe écoute sur le port ${PORT}!`)
 )

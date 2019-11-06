@@ -1,3 +1,5 @@
+let webpack = require('webpack')
+let path = require('path')
 module.exports = {
 	module: {
 		rules: [
@@ -18,16 +20,16 @@ module.exports = {
 			}
 		]
 	},
+	mode: 'development',
 	devServer: {
-		contentBase: './build'
+		contentBase: './build',
+		hot: true
 	},
-	entry: {
-		direct: './direct/main.js',
-		'outil-metier': './outil-metier/Corresplot/main.js'
-	},
+	entry: ['webpack-hot-middleware/client', path.resolve(__dirname, 'main.js')],
 	output: {
-		filename: '[name]/bundle.js',
-		path: __dirname,
+		filename: 'bundle.js',
+		path: path.resolve(__dirname, 'direct/build'),
 		publicPath: '/'
-	}
+	},
+	plugins: [new webpack.HotModuleReplacementPlugin()]
 }
