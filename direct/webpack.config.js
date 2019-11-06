@@ -17,6 +17,12 @@ module.exports = {
 						loader: 'html-loader'
 					}
 				]
+			},
+			{
+				test: /\.(jpe?g|png|svg)$/,
+				use: {
+					loader: 'file-loader'
+				}
 			}
 		]
 	},

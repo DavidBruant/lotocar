@@ -42,12 +42,14 @@
 		"react": "^16.8.6",
 		"react-dom": "^16.8.6",
 		"react-hot-loader": "^4.12.15",
-		"react-leaflet": "^2.4.0"
+		"react-leaflet": "^2.4.0",
+		"styled-components": "^4.4.1"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.6.4",
 		"@babel/preset-env": "^7.6.3",
 		"babel-loader": "^8.0.6",
+		"file-loader": "^4.2.0",
 		"webpack": "^4.41.2",
 		"webpack-cli": "^3.3.10",
 		"webpack-dev-server": "^3.9.0",
