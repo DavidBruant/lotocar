@@ -58,9 +58,10 @@ function TripProposal({
 			flex-direction: row;
 			justify-content: left;
 			align-items: center;
-			padding: 0.3em;
+			padding: 0.5em;
 			background: #8fc7ed33;
 			margin: 1rem;
+
 			border-radius: 1rem;
 		`}
 			className=${classNames('driver', { displayed: isDisplayed })}
@@ -91,7 +92,14 @@ function TripProposal({
 const StandardContact = ({}) => {
 	const tel = '0531600903'
 	return html`
-		<a href="tel:${tel}">Lotocar (${tel})</a>
+		<${styled.a`
+			display: inline-block;
+			margin-top: 0.4rem;
+			background: rgba(147, 196, 125, 1);
+			padding: 0.1rem 0.4rem;
+			border-radius: 0.3rem;
+			color: white;
+		`} href="tel:${tel}">Lotocar (${tel})</a>
 	`
 }
 
