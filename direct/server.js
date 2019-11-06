@@ -1,6 +1,10 @@
 import express from 'express'
 import got from 'got'
 
+import webpack from 'webpack'
+import middleware from 'webpack-dev-middleware'
+import config from './webpack.config.js'
+const compiler = webpack(config)
 import memoize from 'fast-memoize'
 
 import getDrivers from '../spreadsheetDatabase/getDrivers.js'
@@ -13,6 +17,14 @@ const app = express()
 const PORT = process.env.PORT || 39528
 
 const memzGot = memoize(url => got(url))
+console.log(process.env.NODE_ENV)
+
+if (true || process.env.NODE_ENV === 'development')
+	app.use(
+		middleware(compiler, {
+			// webpack-dev-middleware options
+		})
+	)
 
 app.use(express.static(__dirname))
 
