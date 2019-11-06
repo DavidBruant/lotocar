@@ -36,6 +36,10 @@ const CityInput = ({ label, input, setInput }) => {
 				`}>${label}</strong>
 				<${styled.input`
 					margin: 0 0.6rem 0 0.6rem;
+					border: 3px solid steelblue;
+					border-radius: 0.3rem;
+					padding: 0.2rem 0.3rem;
+					font-size: 110%;
 				`}
 					type="text"
 					value=${input.text}
