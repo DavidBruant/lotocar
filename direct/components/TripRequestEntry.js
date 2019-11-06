@@ -34,7 +34,9 @@ const CityInput = ({ label, input, setInput }) => {
 					display: inline-block;
 					width: 4.5rem;
 				`}>${label}</strong>
-				<input
+				<${styled.input`
+					margin: 0 0.6rem 0 0.6rem;
+				`}
 					type="text"
 					value=${input.text}
 					onChange=${e => {
@@ -54,8 +56,15 @@ const CityInput = ({ label, input, setInput }) => {
 	`
 }
 export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
-	const [origin, setOrigin] = useState({ text: '', validated: false })
-	const [destination, setDestination] = useState({ text: '', validated: false })
+	console.log(tripRequest)
+	const [origin, setOrigin] = useState({
+		text: tripRequest.origin,
+		validated: false
+	})
+	const [destination, setDestination] = useState({
+		text: tripRequest.destination,
+		validated: false
+	})
 
 	useEffect(() => {
 		origin.validated &&
