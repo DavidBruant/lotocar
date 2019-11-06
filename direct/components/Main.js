@@ -28,6 +28,25 @@ let Main = function({
 				flex-shrink: 0;
 			}
 		`}>
+		<${Header} />
+			<${styled.div`
+				flex-grow: 1;
+				margin-top: 1rem;
+			`}>
+			<${TripSelection}
+				tripProposalsByTrip=${tripProposalsByTrip}
+				tripRequest=${tripRequest}
+				tripDetailsByTrip=${tripDetailsByTrip}
+				displayedDriverTrips=${displayedDriverTrips}
+				onTripRequestChange=${onTripRequestChange}
+				onTripClick=${onTripClick}
+			/></div>
+			<${Footer} />
+		</main>
+	`
+}
+
+const Header = () => html`
 			<${styled.header`
 				display: flex;
 				justify-content: center;
@@ -41,18 +60,9 @@ let Main = function({
 				<img src=${logo} width="79px" height="79px" />
 				<img src=${logoLot} width="79px" height="79px" />
 			</header>
-			<${styled.div`
-				flex-grow: 1;
-				margin-top: 1rem;
-			`}>
-			<${TripSelection}
-				tripProposalsByTrip=${tripProposalsByTrip}
-				tripRequest=${tripRequest}
-				tripDetailsByTrip=${tripDetailsByTrip}
-				displayedDriverTrips=${displayedDriverTrips}
-				onTripRequestChange=${onTripRequestChange}
-				onTripClick=${onTripClick}
-			/></div>
+`
+
+const Footer = () => html`
 			<footer>
 				<${styled.section`
 					background: #4682b4;
@@ -73,10 +83,8 @@ let Main = function({
 					<div><a href="https://6b49e0e7-23a4-497b-931e-cb12669b2b05.filesusr.com/ugd/8db2ce_bfddb80831494ecc832301c3a4dc0105.pdf">Conditions générales d'utilisation</a></div>
 				</section>
 			</footer>
-		</main>
-	`
-}
 
+`
 let ExportedApp = Main
 
 if (process.env.NODE_ENV !== 'production') {
