@@ -1,6 +1,7 @@
 import React from 'react'
 import htm from 'htm'
 import classNames from 'classnames'
+import styled from 'styled-components'
 
 const html = htm.bind(React.createElement)
 
@@ -117,7 +118,10 @@ export default function DriversList({
 			</div>
 		`
 	return html`
-		<h2 key="h2">Conducteur.rice.s</h2>
+		<${styled.h2`
+			margin-top: 1rem;
+			text-align: center;
+		`} key="h2">Conducteur.rice.s</h2>
 		<ul key="ul" className="drivers-list">
 			${orderedTrips.map(trip => {
 				const tripProposals = tripProposalsByTrip.get(trip)
