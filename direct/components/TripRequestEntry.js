@@ -7,6 +7,7 @@ import {
 	STATUS_VALUE
 } from '../asyncStatusHelpers'
 import { json } from 'd3-fetch'
+import styled from 'styled-components'
 
 const html = htm.bind(React.createElement)
 
@@ -29,7 +30,10 @@ const CityInput = ({ label, input, setInput }) => {
 	return html`
 		<div>
 			<label>
-				<strong>${label}</strong>
+				<${styled.strong`
+					display: inline-block;
+					width: 4.5rem;
+				`}>${label}</strong>
 				<input
 					type="text"
 					value=${input.text}
@@ -65,7 +69,10 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 	let requestStatus = tripRequest[ASYNC_STATUS]
 
 	return html`
-		<h2 key="h2">Où allez-vous ?</h2>
+		<${styled.h2`
+			text-align: center;
+			margin: 0 0 1rem;
+		`}>Où allez-vous ?</h2>
 		<form key="form" className="trip-request-entry">
 			<section className="geography">
 				<${CityInput} label="Départ" input=${origin} setInput=${setOrigin} />
