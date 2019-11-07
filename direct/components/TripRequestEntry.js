@@ -84,11 +84,12 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 		<${styled.h2`
 			text-align: center;
 			margin: 0 0 1.5rem;
-		`}>Où allez-vous ?</h2>
+		`} key="h2">Où allez-vous ?</h2>
 		<form key="form" className="trip-request-entry">
 			<section className="geography">
-				<${CityInput} label="Départ" input=${origin} setInput=${setOrigin} />
+				<${CityInput} key="départ" label="Départ" input=${origin} setInput=${setOrigin} />
 				<${CityInput}
+					key="arrivée"
 					label="Arrivée"
 					input=${destination}
 					setInput=${setDestination}
@@ -111,7 +112,10 @@ const Options = ({ options, onClick }) =>
 				.map(
 					({ nom, departement }) =>
 						html`
-							<li onClick=${() => onClick({ text: nom, validated: true })}>
+							<li
+								key=${nom + departement}
+								onClick=${() => onClick({ text: nom, validated: true })}
+							>
 								<span> ${nom}</span
 								><span
 									style=${{
