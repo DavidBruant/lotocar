@@ -24,6 +24,14 @@ const searchCity = (input, setOptions) =>
 			setOptions([])
 		})
 
+let Input = styled.input`
+	margin: 0 0.6rem 0 0.6rem;
+	border: 3px solid steelblue;
+	border-radius: 0.3rem;
+	padding: 0.2rem 0.3rem;
+	font-size: 110%;
+`
+
 const CityInput = ({ label, input, setInput }) => {
 	const [options, setOptions] = useState([])
 
@@ -34,13 +42,7 @@ const CityInput = ({ label, input, setInput }) => {
 					display: inline-block;
 					width: 4.5rem;
 				`}>${label}</strong>
-				<${styled.input`
-					margin: 0 0.6rem 0 0.6rem;
-					border: 3px solid steelblue;
-					border-radius: 0.3rem;
-					padding: 0.2rem 0.3rem;
-					font-size: 110%;
-				`}
+				<${Input}
 					type="text"
 					value=${input.text}
 					onChange=${e => {
@@ -60,7 +62,6 @@ const CityInput = ({ label, input, setInput }) => {
 	`
 }
 export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
-	console.log(tripRequest)
 	const [origin, setOrigin] = useState({
 		text: tripRequest.origin,
 		validated: false
@@ -78,8 +79,6 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 				destination: destination.text
 			})
 	}, [origin, destination])
-
-	let requestStatus = tripRequest[ASYNC_STATUS]
 
 	return html`
 		<${styled.h2`
