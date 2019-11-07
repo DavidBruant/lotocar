@@ -57,8 +57,8 @@ const Header = () => html`
 				}
 				border-bottom: 1px solid #4682b438;
 			`}>
-				<img src=${logo} width="79px" height="79px" />
-				<img src=${logoLot} width="79px" height="79px" />
+				<img src=${logo} alt="Logo Lotocar" width="79px" height="79px" />
+				<img src=${logoLot} alt="Logo préfecture du Lot" width="79px" height="79px" />
 			</header>
 `
 
