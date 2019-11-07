@@ -53,20 +53,28 @@ export default function TripProposal({
 
 	return html`
 		<${styled.li`
-			display: flex;
-			flex-direction: row;
-			justify-content: left;
-			align-items: center;
 			padding: 0.5em;
 			background: #8fc7ed33;
 			margin: 1rem;
 			border-radius: 1rem;
 			box-shadow: 0 1px 3px rgba(41, 117, 209, 0.12),
 				0 1px 2px rgba(41, 117, 209, 0.24);
+			> * {
+				width: 100%;
+			}
 		`}
 			className=${classNames('driver', { displayed: isDisplayed })}
 			onClick=${onDriverClick}
 		>
+        <${styled.div`
+					display: flex;
+					align-items: center;
+					justify-content: space-evenly;
+					> section {
+						margin-left: 0.6rem;
+						max-width: 55%;
+					}
+				`}>
 		<${Detour} ...${{ detourClassName, tripDetails, additionalTime }} />
 			<section>
 				<span className="name">${Prénom} ${Nom}</span>
@@ -78,8 +86,9 @@ export default function TripProposal({
 						`}				
 					<div className="datetime">⌚ ${heureDépart}</div>
 				</span>
-				<${StandardContact} />
 			</section>
+            </div>
+				<${StandardContact} />
 		</li>
 	`
 }
@@ -88,12 +97,14 @@ const StandardContact = ({}) => {
 	const tel = '0531600903'
 	return html`
 		<${styled.a`
-			display: inline-block;
-			margin-top: 0.4rem;
 			background: rgba(147, 196, 125, 1);
 			padding: 0.1rem 0.4rem;
 			border-radius: 0.3rem;
 			color: white;
+			width: 14rem;
+			margin: 0.4rem auto 0.2rem;
+			display: block;
+			text-align: center;
 		`} href="tel:${tel}">Lotocar (${tel})</a>
 	`
 }
