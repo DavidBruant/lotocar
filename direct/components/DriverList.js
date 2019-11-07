@@ -68,12 +68,7 @@ function TripProposal({
 			className=${classNames('driver', { displayed: isDisplayed })}
 			onClick=${onDriverClick}
 		>
-			<section className="${detourClassName} trip-details">
-				<span
-					>${tripDetails && 'détour'}<br />
-					${tripDetails ? `${Math.ceil(additionalTime)}mins` : undefined}</span
-				>
-			</section>
+		<${Detour} ...${{ detourClassName, tripDetails, additionalTime }} />
 			<section>
 				<span className="name">${Prénom} ${Nom}</span>
 				<span className="proposed-trip">
@@ -168,3 +163,21 @@ export default function DriversList({
 		</ul>
 	`
 }
+
+const Detour = ({ detourClassName, tripDetails, additionalTime }) =>
+	html`
+		<section className="${detourClassName} trip-details">
+			${additionalTime === 0
+				? html`
+						<span>Pas de détour</span>
+				  `
+				: html`
+						<span>
+							${tripDetails && 'détour'}
+							<br />${tripDetails
+								? `${Math.ceil(additionalTime)}mins`
+								: undefined}
+						</span>
+				  `}
+		</section>
+	`
