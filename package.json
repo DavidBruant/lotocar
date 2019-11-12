@@ -4,7 +4,7 @@
 	"description": "Le projet [Lot'ô car](https://www.lotocar.fr/) a commencé avec une base de données dans un Google Spreadsheet à plusieurs feuilles gérée manuellement",
 	"main": "index.js",
 	"scripts": {
-		"start:direct": "(cp direct/Procfile .; cp direct/.env .; heroku local)",
+		"start": "(cp direct/Procfile .; cp direct/.env .; heroku local)",
 		"start:outil-metier": "(cp outil-metier/Procfile .; cp outil-metier/.env .; heroku local)",
 		"build": "webpack --config direct/webpack.config.js; webpack --config outil-metier/webpack.config.js",
 		"dev": "PORT=5000 NODE_ENV=development nodenv -E direct/.env direct/server.js --exec 'node -r esm'",
