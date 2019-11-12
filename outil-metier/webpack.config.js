@@ -3,21 +3,17 @@ let webpack = require('webpack')
 let path = require('path')
 let common = require('../webpack.common.js')
 
+let hotEntry =
+	common.mode === 'development' ? ['webpack-hot-middleware/client'] : []
+
 module.exports = {
 	...common,
 	entry: {
 		corresplot: [
-			...(common.mode === 'development'
-				? ['webpack-hot-middleware/client']
-				: []),
+			...hotEntry,
 			path.resolve(__dirname + '/Corresplot/', 'main.js')
 		],
-		demandes: [
-			...(common.mode === 'development'
-				? ['webpack-hot-middleware/client']
-				: []),
-			path.resolve(__dirname + '/demandes/', 'main.js')
-		]
+		demandes: [...hotEntry, path.resolve(__dirname + '/demandes/', 'main.js')]
 	},
 	output: {
 		filename: '[name].js',
