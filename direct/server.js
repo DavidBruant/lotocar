@@ -3,13 +3,12 @@ import got from 'got'
 
 import webpack from 'webpack'
 import middleware from 'webpack-dev-middleware'
-import hotMiddleware from 'webpack-hot-middleware'
 import config from './webpack.config.js'
 const compiler = webpack(config)
+
 import memoize from 'fast-memoize'
 
 import getDrivers from '../spreadsheetDatabase/getDrivers.js'
-import getRequests from '../spreadsheetDatabase/getRequests.js'
 import getLotocarPositionByPlace from '../spreadsheetDatabase/getLotocarPositionByPlace.js'
 import positionByPlace from '../geography/positionByPlace.js'
 import getPlacesPosition from '../server/getPlacesPosition.js'
@@ -17,7 +16,6 @@ import getPlacesPosition from '../server/getPlacesPosition.js'
 const app = express()
 const PORT = process.env.PORT || 39528
 const devMode = process.env.NODE_ENV === 'development'
-const memzGot = memoize(url => got(url))
 
 if (devMode) {
 	app.use(
