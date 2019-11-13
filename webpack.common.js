@@ -1,7 +1,7 @@
 // You can't use import statements here
 let webpack = require('webpack')
 
-export let devMode = process.env.NODE_ENV === 'development'
+let devMode = process.env.NODE_ENV === 'development'
 
 module.exports = {
 	module: {
