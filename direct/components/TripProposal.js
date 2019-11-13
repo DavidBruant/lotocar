@@ -84,7 +84,10 @@ export default function TripProposal({
 						html`
 							<div className="datetime">🗓️ ${Jours}</div>
 						`}				
-					<div className="datetime">⌚ ${heureDépart}</div>
+						${heureDépart !== '-' &&
+							html`
+								<div className="datetime">⌚ à ${heureDépart}</div>
+							`}
 				</span>
 			</section>
             </div>
