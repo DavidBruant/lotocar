@@ -4,6 +4,8 @@ import htm from 'htm'
 import TripRequestEntry from './TripRequestEntry.js'
 import DriverList from './DriverList.js'
 
+import { ASYNC_STATUS } from '../asyncStatusHelpers'
+
 const html = htm.bind(React.createElement)
 
 export default function({
@@ -24,6 +26,7 @@ export default function({
 			<${DriverList}
 				tripProposalsByTrip=${tripProposalsByTrip}
 				tripDetailsByTrip=${tripDetailsByTrip}
+				tripRequestAsyncStatus=${tripRequest[ASYNC_STATUS]}
 				onTripClick=${onTripClick}
 				validTripRequest=${tripRequest.destination !== '' &&
 					tripRequest.origin !== ''}

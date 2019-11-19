@@ -5,9 +5,16 @@ import TripProposal from './TripProposal'
 
 const html = htm.bind(React.createElement)
 
+import {
+	STATUS_PENDING,
+	STATUS_ERROR,
+	STATUS_VALUE
+} from '../asyncStatusHelpers'
+
 export default function DriversList({
 	tripProposalsByTrip,
 	validTripRequest,
+	tripRequestAsyncStatus,
 	tripDetailsByTrip,
 	onTripClick,
 	tripRequest
@@ -39,7 +46,11 @@ export default function DriversList({
 		<${styled.h2`
 			margin-top: 1rem;
 			text-align: center;
-		`} key="h2">${orderedTrips.length === 0 ? `(aucun résultat)` : `Conducteur.rice.s`}</h2>
+		`} key="h2">${
+			tripRequestAsyncStatus === STATUS_PENDING ? 
+				`(recherche en cours)`
+				: ( orderedTrips.length === 0 ? `(aucun résultat)` : `Conducteur.rice.s` )
+			}</h2>
 		<${styled.ul`
 			margin: 0 auto;
 			max-width: 30rem;
