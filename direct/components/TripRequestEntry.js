@@ -77,7 +77,7 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 				origin: origin.text,
 				destination: destination.text
 			})
-			_paq &&
+			if (_paq)
 				_paq.push([
 					'trackEvent',
 					'trajets',

@@ -16,7 +16,7 @@ export default function Privacy() {
 	}
 
 	return html`
-		<${styled.a``} key="vie-privée" href="#" onClick=${handleOpen}>
+		<a key="vie-privée" href="#" onClick=${handleOpen}>
 			Vie privée
 		</a>
 		${opened &&
@@ -28,7 +28,7 @@ export default function Privacy() {
 	`
 }
 
-export let PrivacyContent = ({}) => html`
+export let PrivacyContent = ({}) => html`<${React.Fragment}>
 	<h1>Vie privée</h1>
 	<p>
 		Nous recueillons des statistiques anonymes sur l'utilisation du site, que
@@ -52,4 +52,5 @@ export let PrivacyContent = ({}) => html`
 	`}
 		src=${`https://stats.data.gouv.fr/index.php?module=CoreAdminHome&action=optOut`}
 	/>
+	</${React.Fragment}>
 `
