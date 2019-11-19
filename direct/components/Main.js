@@ -15,6 +15,7 @@ let Main = function({
 	tripDetailsByTrip,
 	displayedDriverTrips,
 	positionByPlace,
+	validPlaceNames,
 	onTripRequestChange,
 	onTripClick
 }) {
@@ -39,6 +40,7 @@ let Main = function({
 				tripRequest=${tripRequest}
 				tripDetailsByTrip=${tripDetailsByTrip}
 				displayedDriverTrips=${displayedDriverTrips}
+				validPlaceNames=${validPlaceNames}
 				onTripRequestChange=${onTripRequestChange}
 				onTripClick=${onTripClick}
 			/></div>

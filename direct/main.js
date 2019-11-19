@@ -21,7 +21,8 @@ const store = new Store({
 		tripRequest: {
 			origin: '',
 			destination: ''
-		}
+		},
+		validPlaceNames: []
 	},
 	mutations: {
 		addTripProposals(state, tripProposalsByTrip) {
@@ -54,6 +55,9 @@ const store = new Store({
 			clear(state) {
 				state.displayedDriverTrips = new Set()
 			}
+		},
+		setValidPlaceNames(state, validPlaceNames){
+			state.validPlaceNames = validPlaceNames
 		}
 	}
 })
@@ -65,7 +69,8 @@ function renderUI(store) {
 		tripProposalsByTrip,
 		positionByPlace,
 		tripRequest,
-		displayedDriverTrips
+		displayedDriverTrips,
+		validPlaceNames
 	} = store.state
 	//const {setTripRequest} = store.mutations
 	const { setAndPrepareForTripRequest, toggleTripDisplay } = actions
@@ -87,6 +92,7 @@ function renderUI(store) {
 					tripDetailsByTrip,
 					displayedDriverTrips,
 					positionByPlace,
+					validPlaceNames,
 					onTripRequestChange(tripRequest) {
 						setAndPrepareForTripRequest(tripRequest)
 					},
@@ -119,3 +125,5 @@ json('/driver-trip-proposals').then(tripProposals => {
 	}
 	store.mutations.addTripProposals(tripProposalsByTrip)
 })
+
+json('/valid-place-names').then(store.mutations.setValidPlaceNames)

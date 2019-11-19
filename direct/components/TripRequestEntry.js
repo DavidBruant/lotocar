@@ -44,6 +44,7 @@ const CityInput = ({ label, input, setInput }) => {
 				`}>${label}</strong>
 				<${Input}
 					type="text"
+					list="valid-place-names"
 					value=${input.text}
 					onChange=${e => {
 						const value = e.target.value
@@ -54,14 +55,10 @@ const CityInput = ({ label, input, setInput }) => {
 				/>
 				${input.validated && '✔'}
 			</label>
-			${!input.validated &&
-				html`
-					<${Options} options=${options} onClick=${setInput} />
-				`}
 		</div>
 	`
 }
-export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
+export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripRequestChange }) {
 	const [origin, setOrigin] = useState({
 		text: tripRequest.origin,
 		validated: false
@@ -93,6 +90,13 @@ export default function TripRequestEntry({ tripRequest, onTripRequestChange }) {
 			margin: 0 0 1.5rem;
 		`} key="h2">Où allez-vous ?</h2>
 		<form key="form" className="trip-request-entry">
+			<datalist id="valid-place-names">
+				${
+					validPlaceNames.map(validPlaceName => {
+						return html`<option key=${validPlaceName} value=${validPlaceName} />`
+					})
+				}
+			</datalist>
 			<section className="geography">
 				<${CityInput} key="départ" label="Départ" input=${origin} setInput=${setOrigin} />
 				<${CityInput}

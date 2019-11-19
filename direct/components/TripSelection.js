@@ -11,6 +11,7 @@ export default function({
 	tripRequest,
 	tripDetailsByTrip,
 	displayedDriverTrips,
+	validPlaceNames,
 	onTripRequestChange,
 	onTripClick
 }) {
@@ -18,6 +19,7 @@ export default function({
 		<section className="trip-selection">
 			<${TripRequestEntry}
 				tripRequest=${tripRequest}
+				validPlaceNames=${validPlaceNames}
 				onTripRequestChange=${onTripRequestChange}
 			/>
 			<${DriverList}
