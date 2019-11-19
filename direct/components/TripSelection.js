@@ -10,7 +10,6 @@ export default function({
 	tripProposalsByTrip,
 	tripRequest,
 	tripDetailsByTrip,
-	displayedDriverTrips,
 	validPlaceNames,
 	onTripRequestChange,
 	onTripClick
@@ -25,7 +24,6 @@ export default function({
 			<${DriverList}
 				tripProposalsByTrip=${tripProposalsByTrip}
 				tripDetailsByTrip=${tripDetailsByTrip}
-				displayedDriverTrips=${displayedDriverTrips}
 				onTripClick=${onTripClick}
 				validTripRequest=${tripRequest.destination !== '' &&
 					tripRequest.origin !== ''}

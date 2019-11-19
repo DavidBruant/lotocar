@@ -9,7 +9,6 @@ export default function DriversList({
 	tripProposalsByTrip,
 	validTripRequest,
 	tripDetailsByTrip,
-	displayedDriverTrips,
 	onTripClick,
 	tripRequest
 }) {
@@ -61,7 +60,6 @@ export default function DriversList({
 							key=${JSON.stringify(tripProposal)}
 							tripProposal=${tripProposal}
 							tripDetails=${tripDetails}
-							isDisplayed=${displayedDriverTrips.has(trip)}
 							onDriverClick=${() => onTripClick(trip)}
 							tripRequest=${tripRequest}
 						/>
