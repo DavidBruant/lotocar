@@ -57,8 +57,6 @@ export default function _actions(store) {
 				...trip,
 				[ASYNC_STATUS]: STATUS_PENDING
 			})
-
-			store.mutations.displayedDriverTrips.clear()
 		}
 	}
 }
