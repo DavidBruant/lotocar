@@ -89,7 +89,13 @@ export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripR
 			text-align: center;
 			margin: 0 0 1.5rem;
 		`} key="h2">Où allez-vous ?</h2>
-		<form key="form" className="trip-request-entry">
+		<form key="form" className="trip-request-entry" onSubmit=${e => {
+			e.preventDefault();
+			onTripRequestChange({
+				origin: origin.text,
+				destination: destination.text
+			})
+		}}>
 			<datalist id="valid-place-names">
 				${
 					validPlaceNames.map(validPlaceName => {
@@ -106,6 +112,7 @@ export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripR
 					setInput=${setDestination}
 				/>
 			</section>
+			<button type="submit">Rechercher</button>
 		</form>
 	`
 }
