@@ -10,7 +10,7 @@ import getLotocarPositionByPlace from '../spreadsheetDatabase/getLotocarPosition
 import positionByPlace from '../geography/positionByPlace.js'
 import getPlacesPosition from '../server/getPlacesPosition.js'
 
-import driverTripProposalsRoute from '../server/driverTripProposalsRoute.js'
+import driverTripProposalsRoute, {PASSAGER_CONTACT_DIRECT_ACCEPT} from '../server/driverTripProposalsRoute.js'
 
 const app = express()
 const PORT = process.env.PORT || 39528
@@ -31,10 +31,13 @@ app.use(express.static(__dirname))
 app.get('/', (req, res) => res.redirect('/Corresplot/'))
 
 
-function makeDriverObject({Prénom, Nom}){ 
+function makeDriverObject(driverTripProposal){
+	const {Prénom, Nom, 'Contact direct passager': directContact, 'N° de téléphone': phone} = driverTripProposal
+
 	return {
 		Prénom,
-		Nom: Nom && Nom[0].toUpperCase() + '.'
+		Nom: Nom && Nom[0].toUpperCase() + '.',
+		phone: directContact === PASSAGER_CONTACT_DIRECT_ACCEPT ? phone : undefined
 	}
 }
 
