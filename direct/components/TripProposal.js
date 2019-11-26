@@ -21,7 +21,7 @@ export default function TripProposal({
 		Arrivée,
 		Jours,
 		'Heure départ': heureDépart,
-		driver: { Prénom, Nom, phone }
+		driver: { Prénom, Nom, phone, Employeur }
 	} = tripProposal
 
 	let originalDistance,
@@ -92,6 +92,10 @@ export default function TripProposal({
 				<span className="name">${Prénom} ${Nom}</span>
 				<span className="proposed-trip">
 					${Départ} - ${Arrivée}
+					${Employeur &&
+						html`
+							<div>💼 ${Employeur}</div>
+						`}
 					${Jours &&
 						html`
 							<div className="datetime">🗓️ ${Jours}</div>
@@ -110,7 +114,7 @@ export default function TripProposal({
 	`
 }
 
-const TelephoneContact = ({number}) => {
+const TelephoneContact = ({ number }) => {
 	const tel = number || '0531600903'
 	return html`
 		<${ContactLinkButton} href="tel:${tel}"
