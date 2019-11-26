@@ -2,6 +2,7 @@ import React from 'react'
 import htm from 'htm'
 import styled from 'styled-components'
 import TripProposal from './TripProposal'
+import computeDetour from './computeDetour'
 
 const html = htm.bind(React.createElement)
 
@@ -20,16 +21,14 @@ export default function DriversList({
 	tripRequest
 }) {
 	const orderedTrips = [...tripProposalsByTrip.keys()]
-	.filter(trip => tripDetailsByTrip.has(trip))
-	.sort((trip1, trip2) => {
-		const details1 = tripDetailsByTrip.get(trip1)
-		const details2 = tripDetailsByTrip.get(trip2)
-
-		const detour1 = details1.distanceWithDetour - details1.originalDistance
-		const detour2 = details2.distanceWithDetour - details2.originalDistance
-
-		return detour1 - detour2
-	})
+		.filter(trip => tripDetailsByTrip.has(trip))
+		.map(trip => {
+			const tripDetails = tripDetailsByTrip.get(trip)
+			const { originalDistance = 0, distanceWithDetour = Infinity } = tripDetails
+			const detour = computeDetour(originalDistance, distanceWithDetour)
+			return [trip, detour]
+		})
+		.sort(([_1, { additionalTime: a1 }], [_2, { additionalTime: a2 }]) => a1 - a2)
 
 	if (!validTripRequest)
 		return html`
@@ -42,36 +41,74 @@ export default function DriversList({
 				>
 			</div>
 		`
+	const tripsByAdditionalTime = request =>
+		displayTrips(
+			tripProposalsByTrip,
+			displayedDriverTrips,
+			orderedTrips,
+			([, { additionalTime }]) => request(additionalTime)
+		)
 	return html`
-		<${styled.h2`
-			margin-top: 1rem;
-			text-align: center;
-		`} key="h2">${
-			tripRequestAsyncStatus === STATUS_PENDING ? 
-				`(recherche en cours)`
-				: ( orderedTrips.length === 0 ? `(aucun résultat)` : `Conducteur.rice.s` )
-			}</h2>
-		<${styled.ul`
-			margin: 0 auto;
-			max-width: 30rem;
-			margin-bottom: 3rem;
-		`} key="ul" className="drivers-list">
-			${orderedTrips.slice(0, 10).map(trip => {
-				const tripProposals = tripProposalsByTrip.get(trip)
-				const tripDetails = tripDetailsByTrip.get(trip)
+		<${styled.div`
+			h2 {
+				margin-top: 1rem;
+				text-align: center;
+			}
+			ul {
+				margin: 0 auto;
+				max-width: 30rem;
+				margin-bottom: 3rem;
+			}
 
-				return tripProposals.map((tripProposal, j) => {
-					return html`
+			small {
+				text-align: center;
+				display: block;
+				margin-bottom: 1.6rem;
+			}
+
+			em {
+				background: yellow;
+				font-style: normal;
+			}
+		`}>
+			<h2 key="détour0">${
+		tripRequestAsyncStatus === STATUS_PENDING ?
+			`(recherche en cours)`
+			: (orderedTrips.length === 0 ? `(aucun résultat)` : `Trajets disponibles`)
+		}</h2>
+			${tripsByAdditionalTime(time => time < 5)}
+			<h2 key="détour0">Trajets indirects</h2>
+			<small>Un <em>détour de plus de 5 minutes</em> sera nécessaire pour vous récupérer</small>
+			${tripsByAdditionalTime(time => time >= 5 && time < 10)}
+			<small>Un <em>détour de plus de 10 minutes</em> sera nécessaire pour vous récupérer</small>
+			${tripsByAdditionalTime(time => time >= 10 && time < 15)}
+		</div>
+	`
+}
+
+const displayTrips = (
+	tripProposalsByTrip,
+	displayedDriverTrips,
+	trips,
+	filter
+) => html`
+	<ul className="drivers-list">
+		${trips
+		.slice(0, 10)
+		.filter(trip => true)
+		.map(([trip]) => {
+			const tripProposals = tripProposalsByTrip.get(trip)
+
+			return tripProposals.map(
+				(tripProposal, j) => html`
 						<${TripProposal}
 							key=${JSON.stringify(tripProposal)}
 							tripProposal=${tripProposal}
-							tripDetails=${tripDetails}
 							onDriverClick=${() => onTripClick(trip)}
 							tripRequest=${tripRequest}
 						/>
 					`
-				})
-			})}
-		</ul>
-	`
-}
+			)
+		})}
+	</ul>
+`

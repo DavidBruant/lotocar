@@ -3,15 +3,10 @@ import htm from 'htm'
 import classNames from 'classnames'
 import styled from 'styled-components'
 import { SimpleButton, ContactLinkButton } from './ButtonStyle'
-
-const KM = 1000 // meters
-const AVERAGE_SPEED = 60 / 60 // km/min
-const STRAIGHT_LINE_TO_ROAD_DISTANCE_RATIO = 1.4
-
 const html = htm.bind(React.createElement)
+
 export default function TripProposal({
 	tripProposal,
-	tripDetails,
 	onDriverClick,
 	tripRequest
 }) {
@@ -23,31 +18,6 @@ export default function TripProposal({
 		'Heure départ': heureDépart,
 		driver: { Prénom, Nom, phone, Employeur }
 	} = tripProposal
-
-	let originalDistance,
-		distanceWithDetour,
-		detourClassName,
-		additionalDistanceKM
-
-	if (tripDetails) {
-		originalDistance = tripDetails.originalDistance
-		distanceWithDetour = tripDetails.distanceWithDetour
-
-		additionalDistanceKM =
-			((distanceWithDetour - originalDistance) *
-				STRAIGHT_LINE_TO_ROAD_DISTANCE_RATIO) /
-			KM
-
-		detourClassName =
-			additionalDistanceKM <= 5 * AVERAGE_SPEED
-				? 'minor-detour'
-				: additionalDistanceKM <= 15 * AVERAGE_SPEED
-				? 'medium-detour'
-				: 'major-detour'
-	}
-
-	// in minutes, assuming average 60km/h
-	const additionalTime = additionalDistanceKM * AVERAGE_SPEED
 
 	return html`
 		<${styled.li`
@@ -65,8 +35,8 @@ export default function TripProposal({
 			onClick=${onDriverClick}
 		>
 		${
-			selected
-				? html`
+		selected
+			? html`
 						<div>
 							<${FormContact}
 								from=${tripRequest.origin}
@@ -79,40 +49,45 @@ export default function TripProposal({
 							<${SimpleButton} onClick=${() => setSelected(false)}>Retour</button>
 						</div>
 				  `
-				: html`
+			: html`
         <${styled.div`
-					display: flex;
-					align-items: center;
-					justify-content: space-evenly;
-					> section {
-						margin-left: 0.6rem;
-						max-width: 55%;
+					margin: 0.3rem 1rem;
+					.quand {
+						display: flex;
+						align-items: center;
+					}
+					.quand > span {
+						margin-right: 0.6rem;
 					}
 				`}>
-		<${Detour} ...${{ detourClassName, tripDetails, additionalTime }} />
-			<section>
-				<span className="name">${Prénom} ${Nom}</span>
-				<span className="proposed-trip">
-					${Départ} - ${Arrivée}
+				<div className="proposed-trip">
+					🚙 ${Départ} - ${Arrivée}
 					${Employeur &&
-						html`
+				html`
 							<div>💼 ${Employeur}</div>
 						`}
-					${Jours &&
-						html`
-							<div className="datetime">🗓️ ${Jours}</div>
-						`}				
-						${heureDépart !== '-' &&
-							html`
-								<div className="datetime">⌚ à ${heureDépart}</div>
-							`}
-				</span>
-			</section>
+					${(Jours || heureDépart !== '-') &&
+				html`
+							<div className="quand">
+								<span>🗓️</span
+								><span>
+									${html`
+										<span className="datetime">${Jours}</span>
+									`}
+									${heureDépart !== '-' &&
+					html`
+											<span className="datetime"> à ${heureDépart}</span>
+										`}
+								</span>
+							</div>
+						`}
+				</div>
+				<div>👱 ${Prénom} ${Nom}</div>
             </div>
 			<${ContactLinkButton} onClick=${() => {
-						trackDemande('Faire une demande')
-						setSelected(true)
-				  }}>Faire une demande</${ContactLinkButton}>`
+					trackDemande('Faire une demande')
+					setSelected(true)
+				}}>Faire une demande</${ContactLinkButton}>`
 		}
 		</li>
 	`
@@ -145,15 +120,15 @@ const Detour = ({ detourClassName, tripDetails, additionalTime }) =>
 	html`
 		<section className="${detourClassName} trip-details">
 			${additionalTime === 0
-				? html`
+			? html`
 						<span>Pas de détour</span>
 				  `
-				: html`
+			: html`
 						<span>
 							${tripDetails && 'détour'}
 							<br />${tripDetails
-								? `${Math.ceil(additionalTime)}mins`
-								: undefined}
+					? `${Math.ceil(additionalTime)}mins`
+					: undefined}
 						</span>
 				  `}
 		</section>
