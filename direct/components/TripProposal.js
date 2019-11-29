@@ -107,11 +107,18 @@ export default function TripProposal({
 				</span>
 			</section>
             </div>
-			<${ContactLinkButton} onClick=${() =>
-						setSelected(true)}>Faire une demande</${ContactLinkButton}>`
+			<${ContactLinkButton} onClick=${() => {
+						trackDemande('Faire une demande')
+						setSelected(true)
+				  }}>Faire une demande</${ContactLinkButton}>`
 		}
 		</li>
 	`
+}
+
+const trackDemande = whichButton => {
+	if (typeof _paq !== 'undefined')
+		_paq.push(['trackEvent', 'trajets', 'demande', whichButton])
 }
 
 const TelephoneContact = ({ number }) => {
