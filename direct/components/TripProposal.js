@@ -13,7 +13,8 @@ export default function TripProposal({
 	tripProposal,
 	tripDetails,
 	isDisplayed,
-	onDriverClick
+	onDriverClick,
+	tripRequest
 }) {
 	const [selected, setSelected] = useState(false)
 	const {
@@ -71,7 +72,10 @@ export default function TripProposal({
 							<${FormContact}
 								from=${Départ}
 								to=${Arrivée}
-								moreInfo=${`Conducteur sélectionné: ${Prénom} ${Nom}`}
+								moreInfo=${`
+									Conducteur sélectionné: ${Prénom} ${Nom}
+									Recherche de trajet : de ${tripRequest.origin} à ${tripRequest.destination}
+								`}
 							/>
 							<${TelephoneContact} number=${phone} />
 							<${SimpleButton} onClick=${() => setSelected(false)}>Retour</button>
