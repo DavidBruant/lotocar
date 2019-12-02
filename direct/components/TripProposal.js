@@ -70,11 +70,10 @@ export default function TripProposal({
 				? html`
 						<div>
 							<${FormContact}
-								from=${Départ}
-								to=${Arrivée}
+								from=${tripRequest.origin}
+								to=${tripRequest.destination}
 								moreInfo=${`
-									Conducteur sélectionné: ${Prénom} ${Nom}
-									Recherche de trajet : de ${tripRequest.origin} à ${tripRequest.destination}
+									Conducteur sélectionné: ${Prénom} ${Nom}, de ${Départ} à ${Arrivée}.
 								`}
 							/>
 							<${TelephoneContact} number=${phone} />
