@@ -46,11 +46,17 @@ export default function DriversList({
 			tripProposalsByTrip,
 			displayedDriverTrips,
 			orderedTrips,
+			tripRequest,
 			([, { additionalTime }]) => request(additionalTime)
 		)
+
+	const directTrips = tripsByAdditionalTime(time => time < 5),
+		trips10 = tripsByAdditionalTime(time => time >= 10 && time < 20),
+		trips20 = tripsByAdditionalTime(time => time >= 20 && time < 45)
 	return html`
 		<${styled.div`
-			h2 {
+			h2,
+			h3 {
 				margin-top: 1rem;
 				text-align: center;
 			}
@@ -76,12 +82,27 @@ export default function DriversList({
 			`(recherche en cours)`
 			: (orderedTrips.length === 0 ? `(aucun résultat)` : `Trajets disponibles`)
 		}</h2>
-			${tripsByAdditionalTime(time => time < 5)}
-			<h2 key="détour0">Trajets indirects</h2>
-			<small>Un <em>détour de plus de 5 minutes</em> sera nécessaire pour vous récupérer</small>
-			${tripsByAdditionalTime(time => time >= 5 && time < 10)}
-			<small>Un <em>détour de plus de 10 minutes</em> sera nécessaire pour vous récupérer</small>
-			${tripsByAdditionalTime(time => time >= 10 && time < 15)}
+			${directTrips}
+			${(trips10 || trips20) &&
+		html`
+					<h3 key="détour0">Trajets indirects</h3>
+				`}
+			${trips10 &&
+		html`
+					<small
+						>Un <em>détour de plus de 10 minutes</em> sera nécessaire pour vous
+						récupérer :</small
+					>
+					${trips10}
+				`}
+			${trips20 &&
+		html`
+					<small
+						>Un <em>détour conséquent (entre 20 et 45 minutes)</em> sera
+						nécessaire pour vous récupérer :</small
+					>
+					${trips20}
+				`}
 		</div>
 	`
 }
@@ -90,25 +111,30 @@ const displayTrips = (
 	tripProposalsByTrip,
 	displayedDriverTrips,
 	trips,
+	tripRequest,
 	filter
-) => html`
-	<ul className="drivers-list">
-		${trips
-		.slice(0, 10)
-		.filter(trip => true)
+) => {
+	let selectedTrips = trips
+		.slice(0, 20)
+		.filter(filter)
 		.map(([trip]) => {
 			const tripProposals = tripProposalsByTrip.get(trip)
 
 			return tripProposals.map(
 				(tripProposal, j) => html`
-						<${TripProposal}
-							key=${JSON.stringify(tripProposal)}
-							tripProposal=${tripProposal}
-							onDriverClick=${() => onTripClick(trip)}
-							tripRequest=${tripRequest}
-						/>
-					`
+					<${TripProposal}
+						key=${JSON.stringify(tripProposal)}
+						tripProposal=${tripProposal}
+						onDriverClick=${() => onTripClick(trip)}
+						tripRequest=${tripRequest}
+					/>
+				`
 			)
-		})}
-	</ul>
-`
+		})
+	if (!selectedTrips.length) return undefined
+	return html`
+		<ul className="drivers-list">
+			${selectedTrips}
+		</ul>
+	`
+}
