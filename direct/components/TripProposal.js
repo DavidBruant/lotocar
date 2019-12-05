@@ -2,7 +2,10 @@ import React, { useState } from 'react'
 import htm from 'htm'
 import classNames from 'classnames'
 import styled from 'styled-components'
-import { SimpleButton, ContactLinkButton } from './ButtonStyle'
+import {
+	SimpleButton,
+	ContactLinkButton as ContactButtonStyle
+} from './ButtonStyle'
 const html = htm.bind(React.createElement)
 
 export default function TripProposal({
@@ -27,29 +30,11 @@ export default function TripProposal({
 			border-radius: 1rem;
 			box-shadow: 0 1px 3px rgba(41, 117, 209, 0.12),
 				0 1px 2px rgba(41, 117, 209, 0.24);
-			> * {
-				width: 100%;
-			}
 		`}
 			className=${classNames('driver')}
 			onClick=${onDriverClick}
 		>
-		${
-		selected
-			? html`
-						<div>
-							<${FormContact}
-								from=${tripRequest.origin}
-								to=${tripRequest.destination}
-								moreInfo=${`
-									Conducteur sélectionné: ${Prénom} ${Nom}, de ${Départ} à ${Arrivée}.
-								`}
-							/>
-							<${TelephoneContact} number=${phone} />
-							<${SimpleButton} onClick=${() => setSelected(false)}>Retour</button>
-						</div>
-				  `
-			: html`
+		${html`
         <${styled.div`
 					margin: 0.3rem 1rem;
 					.quand {
@@ -64,11 +49,11 @@ export default function TripProposal({
 				<div className="proposed-trip">
 					<strong>🚙 ${Départ} - ${Arrivée}</strong>
 					${Employeur &&
-				html`
+			html`
 							<div>💼 ${Employeur}</div>
 						`}
 					${(Jours || heureDépart !== '-') &&
-				html`
+			html`
 							<div className="quand">
 								<span>🗓️</span
 								><span>
@@ -76,7 +61,7 @@ export default function TripProposal({
 										<span className="datetime">${Jours}</span>
 									`}
 									${heureDépart !== '-' &&
-					html`
+				html`
 											<span className="datetime"> à ${heureDépart}</span>
 										`}
 								</span>
@@ -84,11 +69,32 @@ export default function TripProposal({
 						`}
 				</div>
 				<div>👱 ${Prénom} ${Nom}</div>
-            </div>
-			<${ContactLinkButton} onClick=${() => {
+			</div>`}
+			${
+		selected
+			? html`
+						<div>
+						${!phone &&
+				html`
+								<${FormContact}
+									from=${tripRequest.origin}
+									to=${tripRequest.destination}
+									moreInfo=${`
+									Conducteur sélectionné: ${Prénom} ${Nom}, de ${Départ} à ${Arrivée}.
+								`}
+								/>
+							`}
+						<${TelephoneContact} number=${phone} />
+						<${SimpleButton} onClick=${() => setSelected(false)}>Retour</button>
+						</div>
+				  `
+			: html`
+			<${ContactButtonStyle} onClick=${() => {
 					trackDemande('Faire une demande')
 					setSelected(true)
-				}}>Faire une demande</${ContactLinkButton}>`
+				}}>${
+				phone ? '📞 Contact direct' : 'Faire une demande'
+				}</${ContactButtonStyle}>`
 		}
 		</li>
 	`
@@ -102,25 +108,26 @@ const trackDemande = whichButton => {
 const TelephoneContact = ({ number }) => {
 	const tel = number || '0531600903'
 	return html`
-		<${ContactLinkButton} href="tel:${tel}"
-			>${number ? `Contacter directement la personne` : `Lotocar`} (${tel}) 
-		</${ContactLinkButton}>
-	`
+		< ${ ContactButtonStyle} href = "tel:${tel}"
+			> ${ number ? `` : `Demande via Lotocar`} ${tel}
+		</${ ContactButtonStyle}>
+		`
 }
 const FormContact = ({ from, to, moreInfo }) => {
 	return html`
-		<${ContactLinkButton} 
-		target="_blank"
-		href=${`https://docs.google.com/forms/d/e/1FAIpQLSf-bhTbcJ36S7PQK167zxaEkvaMSBzg8yOwQx0fDUQMd4_pYQ/viewform?entry.227174060=${from}&entry.44825971=${to}&entry.1204459643=${moreInfo}`}>
-		📄 Demande en ligne
-		</${ContactLinkButton}>
-	`
+		< ${ ContactButtonStyle}
+	target = "_blank"
+	href = ${ `https://docs.google.com/forms/d/e/1FAIpQLSf-bhTbcJ36S7PQK167zxaEkvaMSBzg8yOwQx0fDUQMd4_pYQ/viewform?entry.227174060=${from}&entry.44825971=${to}&entry.1204459643=${moreInfo}`}>
+	📄 Demande en ligne
+		</${ ContactButtonStyle}>
+		`
 }
 
 const Detour = ({ detourClassName, tripDetails, additionalTime }) =>
 	html`
-		<section className="${detourClassName} trip-details">
-			${additionalTime === 0
+		< section className = "${detourClassName} trip-details" >
+			${
+		additionalTime === 0
 			? html`
 						<span>Pas de détour</span>
 				  `
@@ -132,5 +139,5 @@ const Detour = ({ detourClassName, tripDetails, additionalTime }) =>
 					: undefined}
 						</span>
 				  `}
-		</section>
-	`
+		</section >
+		`
