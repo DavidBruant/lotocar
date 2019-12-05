@@ -55,13 +55,14 @@ export default function TripProposal({
 					.quand {
 						display: flex;
 						align-items: center;
+						width: 80%;
 					}
 					.quand > span {
 						margin-right: 0.6rem;
 					}
 				`}>
 				<div className="proposed-trip">
-					🚙 ${Départ} - ${Arrivée}
+					<strong>🚙 ${Départ} - ${Arrivée}</strong>
 					${Employeur &&
 				html`
 							<div>💼 ${Employeur}</div>
