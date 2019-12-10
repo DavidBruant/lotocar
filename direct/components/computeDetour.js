@@ -14,7 +14,7 @@ export default (originalDistance, distanceWithDetour) => {
 			: additionalDistanceKM <= 15 * AVERAGE_SPEED
 				? 'medium-detour'
 				: 'major-detour'
-	// in minutes, assuming average 60km/h
+
 	const additionalTime = additionalDistanceKM * AVERAGE_SPEED
 	return { additionalTime, detourClass }
 }

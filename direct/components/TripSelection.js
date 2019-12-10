@@ -8,7 +8,7 @@ import { ASYNC_STATUS } from '../asyncStatusHelpers'
 
 const html = htm.bind(React.createElement)
 
-export default function({
+export default function ({
 	tripProposalsByTrip,
 	tripRequest,
 	tripDetailsByTrip,
@@ -29,7 +29,7 @@ export default function({
 				tripRequestAsyncStatus=${tripRequest[ASYNC_STATUS]}
 				onTripClick=${onTripClick}
 				validTripRequest=${tripRequest.destination !== '' &&
-					tripRequest.origin !== ''}
+		tripRequest.origin !== ''}
 				tripRequest=${tripRequest}
 			/>
 		</section>

@@ -122,22 +122,3 @@ const FormContact = ({ from, to, moreInfo }) => {
 		</${ ContactButtonStyle}>
 		`
 }
-
-const Detour = ({ detourClassName, tripDetails, additionalTime }) =>
-	html`
-		< section className = "${detourClassName} trip-details" >
-			${
-		additionalTime === 0
-			? html`
-						<span>Pas de détour</span>
-				  `
-			: html`
-						<span>
-							${tripDetails && 'détour'}
-							<br />${tripDetails
-					? `${Math.ceil(additionalTime)}mins`
-					: undefined}
-						</span>
-				  `}
-		</section >
-		`

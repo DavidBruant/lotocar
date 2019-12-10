@@ -44,10 +44,9 @@ export default function DriversList({
 	const tripsByAdditionalTime = request =>
 		displayTrips(
 			tripProposalsByTrip,
-			displayedDriverTrips,
 			orderedTrips,
 			tripRequest,
-			([, { additionalTime }]) => request(additionalTime)
+			([_, { additionalTime }]) => request(additionalTime)
 		)
 
 	const directTrips = tripsByAdditionalTime(time => time < 5),
@@ -109,7 +108,6 @@ export default function DriversList({
 
 const displayTrips = (
 	tripProposalsByTrip,
-	displayedDriverTrips,
 	trips,
 	tripRequest,
 	filter
