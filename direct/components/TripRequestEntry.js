@@ -17,6 +17,8 @@ const Strong = styled.strong`
 	width: 4.5rem;
 `
 
+const DATALIST_ID = "valid-place-names";
+
 export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripRequestChange }) {
 
 	const originRef = React.createRef();
@@ -47,19 +49,19 @@ export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripR
 			}
 
 		}}>
-			<datalist id="valid-place-names">
-				${validPlaceNames.map(validPlaceName => {
-					return html`
-						<option key=${validPlaceName} value=${validPlaceName} />
-					`
-				})}
+			<datalist id=${DATALIST_ID}>
+				${
+					validPlaceNames.map(validPlaceName => {
+						return html`<option key=${validPlaceName} value=${validPlaceName} />`
+					})
+				}
 			</datalist>
 			<section className="geography">
 				<label>
 					<${Strong}>Départ</strong>
 					<${Input}
 						type="text"
-						list="valid-place-names"
+						list=${DATALIST_ID}
 						value=${tripRequest.origin}
 						ref=${originRef}
 					/>
@@ -68,7 +70,7 @@ export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripR
 					<${Strong}>Arrivée</strong>
 					<${Input}
 						type="text"
-						list="valid-place-names"
+						list=${DATALIST_ID}
 						value=${tripRequest.destination}
 						ref=${destinationRef}
 					/>
