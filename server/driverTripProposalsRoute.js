@@ -4,6 +4,14 @@ export const PASSAGER_CONTACT_DIRECT_ACCEPT = true;
 export const PASSAGER_CONTACT_DIRECT_REFUSE = false;
 const PASSAGER_CONTACT_DIRECT_NO_ANSWER = PASSAGER_CONTACT_DIRECT_REFUSE; // qui ne dit mot... ne consent pas
 
+function removeExpiredDriverTripProposals(driverTripProposals){
+    const today = Date.now();
+
+    return driverTripProposals.filter(({DateExpiration}) => {
+        return (new Date(DateExpiration)).getTime() < today
+    })
+}
+
 export default function(makeDriverObject){
 
     return (req, res) => {
@@ -23,6 +31,7 @@ export default function(makeDriverObject){
             }
             return driverTripProposals
         })
+        .then(removeExpiredDriverTripProposals)
         .then(function driverTripProposalsToTripProposals(driverTripProposals) {
             const tripProposals = []
 
