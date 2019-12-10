@@ -1,30 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import htm from 'htm'
-import {
-	ASYNC_STATUS,
-	STATUS_PENDING,
-	STATUS_ERROR,
-	STATUS_VALUE
-} from '../asyncStatusHelpers'
-import { json } from 'd3-fetch'
 import styled from 'styled-components'
 
 const html = htm.bind(React.createElement)
 
-const searchCity = (input, setOptions) =>
-	json(
-		`https://geo.api.gouv.fr/communes?nom=${input}&fields=nom,code,departement,region&boost=population`
-	)
-		.then(json => setOptions(json))
-		.catch(function(error) {
-			console.error(
-				'Erreur dans la recherche de communes à partir du code postal',
-				error
-			)
-			setOptions([])
-		})
-
-let Input = styled.input`
+const Input = styled.input`
 	margin: 0 0.6rem 0 0.6rem;
 	border: 3px solid steelblue;
 	border-radius: 0.3rem;
@@ -32,45 +12,15 @@ let Input = styled.input`
 	font-size: 110%;
 `
 
-const CityInput = ({ label, input, setInput }) => {
-	const [options, setOptions] = useState([])
+const Strong = styled.strong`
+	display: inline-block;
+	width: 4.5rem;
+`
 
-	return html`
-		<div>
-			<label>
-				<${styled.strong`
-					display: inline-block;
-					width: 4.5rem;
-				`}>${label}</strong>
-				<${Input}
-					type="text"
-					list="valid-place-names"
-					value=${input.text}
-					onChange=${e => {
-						const value = e.target.value
-						setInput({ text: value, validated: false })
-						if (value.length > 2) searchCity(e.target.value, setOptions)
-						// Vérifier qu'aucune ville n'est exclue : https://fr.wikipedia.org/wiki/Liste_de_toponymes_courts
-					}}
-				/>
-				${input.validated && '✔'}
-			</label>
-		</div>
-	`
-}
-export default function TripRequestEntry({
-	tripRequest,
-	validPlaceNames,
-	onTripRequestChange
-}) {
-	const [origin, setOrigin] = useState({
-		text: tripRequest.origin,
-		validated: false
-	})
-	const [destination, setDestination] = useState({
-		text: tripRequest.destination,
-		validated: false
-	})
+export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripRequestChange }) {
+
+	const originRef = React.createRef();
+	const destinationRef = React.createRef();
 
 	return html`
 		<${styled.h2`
@@ -78,18 +28,24 @@ export default function TripRequestEntry({
 			margin: 0 0 1.5rem;
 		`} key="h2">Où allez-vous ?</h2>
 		<form key="form" className="trip-request-entry" onSubmit=${e => {
-			e.preventDefault()
+			const origin = originRef.current.value;
+			const destination = destinationRef.current.value;
+
+			e.preventDefault();
 			onTripRequestChange({
-				origin: origin.text,
-				destination: destination.text
+				origin,
+				destination
 			})
-			if (typeof _paq !== 'undefined')
+
+			if (_paq){
 				_paq.push([
 					'trackEvent',
 					'trajets',
 					'recherche',
-					origin.text + ' | ' + destination.text
+					origin + ' | ' + destination
 				])
+			}
+
 		}}>
 			<datalist id="valid-place-names">
 				${validPlaceNames.map(validPlaceName => {
@@ -99,71 +55,26 @@ export default function TripRequestEntry({
 				})}
 			</datalist>
 			<section className="geography">
-				<${CityInput} key="départ" label="Départ" input=${origin} setInput=${setOrigin} />
-				<${CityInput}
-					key="arrivée"
-					label="Arrivée"
-					input=${destination}
-					setInput=${setDestination}
-				/>
+				<label>
+					<${Strong}>Départ</strong>
+					<${Input}
+						type="text"
+						list="valid-place-names"
+						value=${tripRequest.origin}
+						ref=${originRef}
+					/>
+				</label>
+				<label>
+					<${Strong}>Arrivée</strong>
+					<${Input}
+						type="text"
+						list="valid-place-names"
+						value=${tripRequest.destination}
+						ref=${destinationRef}
+					/>
+				</label>
 			</section>
 			<button type="submit">Rechercher</button>
 		</form>
 	`
 }
-
-const Options = ({ options, onClick }) =>
-	html`
-		<${styled.ul`
-			list-style-type: none;
-			padding-left: 1rem;
-			li {
-				cursor: pointer;
-			}
-		`} style=${{ width: '100%' }}>
-			${options
-				.map(
-					({ nom, departement }) =>
-						html`
-							<li
-								key=${nom + departement}
-								onClick=${() => onClick({ text: nom, validated: true })}
-							>
-								<span> ${nom}</span
-								><span
-									style=${{
-										color:
-											departement && departement.nom === 'Lot'
-												? 'green'
-												: 'grey'
-									}}
-									>${departement ? ' (' + departement.nom + ')' : ''}
-								</span>
-							</li>
-						`
-				)
-				.slice(0, 5)}
-		</ul>
-	`
-
-const RequestStatus = ({ status }) => html`
-	<div className="status">
-		${status === STATUS_PENDING
-			? 'Recherche en cours...'
-			: status === STATUS_ERROR
-			? html`
-					<div
-						style=${{
-							background: '#ffd8d8',
-							padding: '.4rem 1rem',
-							borderRadius: '1rem',
-							margin: '.6rem'
-						}}
-					>
-						Erreur lors de votre recherche. <br />Êtes-vous sûr que ces villes
-						existent ?
-					</div>
-			  `
-			: undefined}
-	</div>
-`
