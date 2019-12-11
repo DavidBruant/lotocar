@@ -41,7 +41,7 @@ export default function TripProposal({
 						display: flex;
 						align-items: center;
 						width: 80%;
-						margin: .3rem 0
+						margin: 0.3rem 0;
 					}
 					.quand > span {
 						margin-right: 0.6rem;
@@ -53,11 +53,11 @@ export default function TripProposal({
 				<div className="proposed-trip">
 					<strong>🚙 ${Départ} - ${Arrivée}</strong>
 					${ArrivéePrécise &&
-			html`
+						html`
 							<small>📌 ${ArrivéePrécise}</small>
 						`}
 					${(Jours || heureDépart !== '-') &&
-			html`
+						html`
 							<div className="quand">
 								<span>🗓️</span
 								><span>
@@ -65,7 +65,7 @@ export default function TripProposal({
 										<span className="datetime">${Jours}</span>
 									`}
 									${heureDépart !== '-' &&
-				html`
+										html`
 											<span className="datetime"> à ${heureDépart}</span>
 										`}
 								</span>
@@ -75,11 +75,11 @@ export default function TripProposal({
 				<div>👱 ${Prénom} ${Nom}</div>
 			</div>`}
 			${
-		selected
-			? html`
+				selected
+					? html`
 						<div>
 						${!phone &&
-				html`
+							html`
 								<${FormContact}
 									from=${tripRequest.origin}
 									to=${tripRequest.destination}
@@ -92,14 +92,14 @@ export default function TripProposal({
 						<${SimpleButton} onClick=${() => setSelected(false)}>Retour</button>
 						</div>
 				  `
-			: html`
+					: html`
 			<${ContactButtonStyle} onClick=${() => {
-					trackDemande('Faire une demande')
-					setSelected(true)
-				}}>${
-				phone ? '📞 Contact direct' : 'Faire une demande'
-				}</${ContactButtonStyle}>`
-		}
+							trackDemande('Faire une demande')
+							setSelected(true)
+					  }}>${
+							phone ? '📞 Contact direct' : 'Faire une demande'
+					  }</${ContactButtonStyle}>`
+			}
 		</li>
 	`
 }
@@ -112,17 +112,19 @@ const trackDemande = whichButton => {
 const TelephoneContact = ({ number }) => {
 	const tel = number || '0531600903'
 	return html`
-		< ${ ContactButtonStyle} href = "tel:${tel}"
-			> ${ number ? `` : `Demande via Lotocar`} ${tel}
-		</${ ContactButtonStyle}>
+		<${ContactButtonStyle} href="tel:${tel}"> ${
+		number ? `` : `Demande via Lotocar`
+	} ${tel}
+		</${ContactButtonStyle}>
 		`
 }
 const FormContact = ({ from, to, moreInfo }) => {
 	return html`
-		< ${ ContactButtonStyle}
-	target = "_blank"
-	href = ${ `https://docs.google.com/forms/d/e/1FAIpQLSf-bhTbcJ36S7PQK167zxaEkvaMSBzg8yOwQx0fDUQMd4_pYQ/viewform?entry.227174060=${from}&entry.44825971=${to}&entry.1204459643=${moreInfo}`}>
+		<${ContactButtonStyle}
+	target="_blank"
+	href=${`https://docs.google.com/forms/d/e/1FAIpQLSf-bhTbcJ36S7PQK167zxaEkvaMSBzg8yOwQx0fDUQMd4_pYQ/viewform?entry.227174060=${from}&entry.44825971=${to}&entry.1204459643=${moreInfo}`}
+	>
 	📄 Demande en ligne
-		</${ ContactButtonStyle}>
+		</${ContactButtonStyle}>
 		`
 }
