@@ -78,7 +78,6 @@ function renderUI(store) {
 				onTripRequestChange(tripRequest) {
 					setAndPrepareForTripRequest(tripRequest)
 				},
-				onTripClick: toggleTripDisplay
 			}}
 			/>
 		`,

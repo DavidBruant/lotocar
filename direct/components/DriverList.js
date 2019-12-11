@@ -17,7 +17,6 @@ export default function DriversList({
 	validTripRequest,
 	tripRequestAsyncStatus,
 	tripDetailsByTrip,
-	onTripClick,
 	tripRequest
 }) {
 	const orderedTrips = [...tripProposalsByTrip.keys()]
@@ -123,7 +122,6 @@ const displayTrips = (
 					<${TripProposal}
 						key=${JSON.stringify(tripProposal)}
 						tripProposal=${tripProposal}
-						onDriverClick=${() => onTripClick(trip)}
 						tripRequest=${tripRequest}
 					/>
 				`

@@ -13,8 +13,7 @@ export default function ({
 	tripRequest,
 	tripDetailsByTrip,
 	validPlaceNames,
-	onTripRequestChange,
-	onTripClick
+	onTripRequestChange
 }) {
 	return html`
 		<section className="trip-selection">
@@ -27,7 +26,6 @@ export default function ({
 				tripProposalsByTrip=${tripProposalsByTrip}
 				tripDetailsByTrip=${tripDetailsByTrip}
 				tripRequestAsyncStatus=${tripRequest[ASYNC_STATUS]}
-				onTripClick=${onTripClick}
 				validTripRequest=${tripRequest.destination !== '' &&
 		tripRequest.origin !== ''}
 				tripRequest=${tripRequest}
