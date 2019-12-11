@@ -65,7 +65,7 @@ export default function DriversList({
 				margin-bottom: 3rem;
 			}
 
-			small {
+			> small {
 				text-align: center;
 				display: block;
 				margin-bottom: 1.6rem;

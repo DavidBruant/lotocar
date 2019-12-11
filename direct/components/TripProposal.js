@@ -19,7 +19,7 @@ export default function TripProposal({
 		Arrivée,
 		Jours,
 		'Heure départ': heureDépart,
-		driver: { Prénom, Nom, phone, Employeur }
+		driver: { Prénom, Nom, phone, Employeur: ArrivéePrécise }
 	} = tripProposal
 
 	return html`
@@ -41,16 +41,20 @@ export default function TripProposal({
 						display: flex;
 						align-items: center;
 						width: 80%;
+						margin: .3rem 0
 					}
 					.quand > span {
 						margin-right: 0.6rem;
 					}
+					small {
+						display: block;
+					}
 				`}>
 				<div className="proposed-trip">
 					<strong>🚙 ${Départ} - ${Arrivée}</strong>
-					${Employeur &&
+					${ArrivéePrécise &&
 			html`
-							<div>💼 ${Employeur}</div>
+							<small>📌 ${ArrivéePrécise}</small>
 						`}
 					${(Jours || heureDépart !== '-') &&
 			html`
