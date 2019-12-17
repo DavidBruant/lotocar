@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import htm from 'htm'
 import {
 	ASYNC_STATUS,
@@ -72,22 +72,6 @@ export default function TripRequestEntry({
 		validated: false
 	})
 
-	useEffect(() => {
-		if (origin.validated && destination.validated) {
-			onTripRequestChange({
-				origin: origin.text,
-				destination: destination.text
-			})
-			if (typeof _paq !== 'undefined')
-				_paq.push([
-					'trackEvent',
-					'trajets',
-					'recherche',
-					origin.text + ' | ' + destination.text
-				])
-		}
-	}, [origin, destination])
-
 	return html`
 		<${styled.h2`
 			text-align: center;
@@ -99,6 +83,13 @@ export default function TripRequestEntry({
 				origin: origin.text,
 				destination: destination.text
 			})
+			if (typeof _paq !== 'undefined')
+				_paq.push([
+					'trackEvent',
+					'trajets',
+					'recherche',
+					origin.text + ' | ' + destination.text
+				])
 		}}>
 			<datalist id="valid-place-names">
 				${validPlaceNames.map(validPlaceName => {
