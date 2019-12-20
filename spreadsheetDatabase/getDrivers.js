@@ -26,7 +26,7 @@ const CONDUCTEUR_PROPS = [
 	'Type de covoit',
 	'Employeur',
 	'Contact direct passager',
-	'DateExpiration'
+	'DateProposée'
 ]
 
 export default function getDrivers() {

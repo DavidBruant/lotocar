@@ -23,20 +23,23 @@ export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripR
 
 	const originRef = React.createRef();
 	const destinationRef = React.createRef();
+	const dateRef = React.createRef();
 
 	return html`
 		<${styled.h2`
 			text-align: center;
 			margin: 0 0 1.5rem;
-		`} key="h2">Où allez-vous ?</h2>
+		`} key="h2">Quel trajet souhaitez-vous faire ?</h2>
 		<form key="form" className="trip-request-entry" onSubmit=${e => {
 			const origin = originRef.current.value;
 			const destination = destinationRef.current.value;
+			const date = dateRef.current.value;
 
 			e.preventDefault();
 			onTripRequestChange({
 				origin,
-				destination
+				destination,
+				date
 			})
 
 			if (_paq){
@@ -73,6 +76,14 @@ export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripR
 						list=${DATALIST_ID}
 						defaultValue=${tripRequest.destination}
 						ref=${destinationRef}
+					/>
+				</label>
+				<label>
+					<${Strong}>Date</strong>
+					<${Input}
+						type="date"
+						defaultValue=${tripRequest.date}
+						ref=${dateRef}
 					/>
 				</label>
 			</section>

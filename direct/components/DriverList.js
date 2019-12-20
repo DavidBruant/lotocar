@@ -1,6 +1,8 @@
 import React from 'react'
 import htm from 'htm'
 import styled from 'styled-components'
+import { isEqual, parse } from 'date-fns'
+
 import TripProposal from './TripProposal'
 import computeDetour from './computeDetour'
 
@@ -8,8 +10,6 @@ const html = htm.bind(React.createElement)
 
 import {
 	STATUS_PENDING,
-	STATUS_ERROR,
-	STATUS_VALUE
 } from '../asyncStatusHelpers'
 
 export default function DriversList({
@@ -117,8 +117,17 @@ const displayTrips = (
 		.map(([trip]) => {
 			const tripProposals = tripProposalsByTrip.get(trip)
 
-			return tripProposals.map(
-				(tripProposal, j) => html`
+			return tripProposals
+			.filter(function datesMatch({DateProposée}){
+				const backupDate = new Date()
+
+				return !DateProposée || !tripRequest.date || isEqual(
+					parse(DateProposée, 'dd/MM/yyyy', backupDate),
+					parse(tripRequest.date, 'yyyy-MM-dd', backupDate)
+				)
+			})
+			.map(
+				(tripProposal) => html`
 					<${TripProposal}
 						key=${JSON.stringify(tripProposal)}
 						tripProposal=${tripProposal}

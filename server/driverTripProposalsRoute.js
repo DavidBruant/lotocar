@@ -7,11 +7,11 @@ const PASSAGER_CONTACT_DIRECT_NO_ANSWER = PASSAGER_CONTACT_DIRECT_REFUSE; // qui
 function removeExpiredDriverTripProposals(driverTripProposals){
     const now = Date.now();
 
-    return driverTripProposals.filter(({DateExpiration, 'Heure départ': HeureDépart}) => {
-        if(!DateExpiration) // no expiration date means no expiration
+    return driverTripProposals.filter(({DateProposée, 'Heure départ': HeureDépart}) => {
+        if(!DateProposée) // no specific proposal date means all date work
             return true;
 
-        const [day, month, year] = DateExpiration.split('/')
+        const [day, month, year] = DateProposée.split('/')
         const [hour, minute, seconds] = HeureDépart.split(':')
 
         return (new Date(year, month-1, day, hour, minute, seconds)).getTime() > now
@@ -46,9 +46,10 @@ export default function(makeDriverObject){
                     Départ,
                     Arrivée,
                     Trajet,
-                    Jours,
+                    Jours, // trajet récurrent
+                    DateProposée, // trajet ponctuel
                     'Heure départ': HeureDépart,
-                    'Heure retour': HeureRetour
+                    'Heure retour': HeureRetour,
                 } = driverTripProposal
 
                 const driver = Object.freeze(makeDriverObject(driverTripProposal))
@@ -58,6 +59,7 @@ export default function(makeDriverObject){
                     Arrivée,
                     Trajet,
                     Jours,
+                    DateProposée,
                     'Heure départ': HeureDépart,
                     driver
                 })
@@ -68,6 +70,7 @@ export default function(makeDriverObject){
                         Arrivée: Départ,
                         Trajet: undefined, // should be the reverse Trajet. Will this ever matter?
                         Jours,
+                        DateProposée,
                         'Heure départ': HeureRetour,
                         driver
                     })
