@@ -62,7 +62,7 @@ export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripR
 					<${Input}
 						type="text"
 						list=${DATALIST_ID}
-						value=${tripRequest.origin}
+						defaultValue=${tripRequest.origin}
 						ref=${originRef}
 					/>
 				</label>
@@ -71,7 +71,7 @@ export default function TripRequestEntry({ tripRequest, validPlaceNames, onTripR
 					<${Input}
 						type="text"
 						list=${DATALIST_ID}
-						value=${tripRequest.destination}
+						defaultValue=${tripRequest.destination}
 						ref=${destinationRef}
 					/>
 				</label>

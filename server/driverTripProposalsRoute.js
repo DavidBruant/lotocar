@@ -5,10 +5,16 @@ export const PASSAGER_CONTACT_DIRECT_REFUSE = false;
 const PASSAGER_CONTACT_DIRECT_NO_ANSWER = PASSAGER_CONTACT_DIRECT_REFUSE; // qui ne dit mot... ne consent pas
 
 function removeExpiredDriverTripProposals(driverTripProposals){
-    const today = Date.now();
+    const now = Date.now();
 
-    return driverTripProposals.filter(({DateExpiration}) => {
-        return (new Date(DateExpiration)).getTime() < today
+    return driverTripProposals.filter(({DateExpiration, 'Heure départ': HeureDépart}) => {
+        if(!DateExpiration) // no expiration date means no expiration
+            return true;
+
+        const [day, month, year] = DateExpiration.split('/')
+        const [hour, minute, seconds] = HeureDépart.split(':')
+
+        return (new Date(year, month-1, day, hour, minute, seconds)).getTime() > now
     })
 }
 
