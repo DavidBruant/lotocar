@@ -15,7 +15,7 @@ export default function(makeDriverObject){
                 
                 const passagerDirectValue = driverTripProposal['Contact direct passager'] && driverTripProposal['Contact direct passager'].trim() || '';
                 
-                driverTripProposal['Contact direct passager'] = passagerDirectValue === 'Oui' ?
+                driverTripProposal['Contact direct passager'] = passagerDirectValue.toLowerCase() === 'oui' ?
                     PASSAGER_CONTACT_DIRECT_ACCEPT : 
                     (passagerDirectValue.startsWith('Non') ? 
                         PASSAGER_CONTACT_DIRECT_REFUSE : 
