@@ -1,7 +1,8 @@
 import React from 'react'
 import htm from 'htm'
 import styled from 'styled-components'
-import { isEqual, parse } from 'date-fns'
+import { isEqual, parse, format } from 'date-fns'
+import { fr } from 'date-fns/locale'
 
 import TripProposal from './TripProposal'
 import computeDetour from './computeDetour'
@@ -105,6 +106,17 @@ export default function DriversList({
 	`
 }
 
+const JOURS_LOWERCASE = new Set(['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'])
+function getJoursSet(JoursString){
+	const L_ESPACE = ' '; // l'ultime frontière
+	return new Set(
+		JoursString.replace(/,/g, L_ESPACE).replace(/\s+/g, L_ESPACE)
+			.split(L_ESPACE)
+			.map(j => j.trim().toLowerCase())
+			.filter(j => JOURS_LOWERCASE.has(j))
+	)
+}
+
 const displayTrips = (
 	tripProposalsByTrip,
 	trips,
@@ -118,13 +130,14 @@ const displayTrips = (
 			const tripProposals = tripProposalsByTrip.get(trip)
 
 			return tripProposals
-			.filter(function datesMatch({DateProposée}){
+			.filter(function datesMatch({DateProposée, Jours}){
 				const backupDate = new Date()
 
-				return !DateProposée || !tripRequest.date || isEqual(
-					parse(DateProposée, 'dd/MM/yyyy', backupDate),
-					parse(tripRequest.date, 'yyyy-MM-dd', backupDate)
-				)
+				const tripRequestDate = tripRequest.date && parse(tripRequest.date, 'yyyy-MM-dd', backupDate);
+
+				return !tripRequest.date || 
+					(DateProposée && isEqual( parse(DateProposée, 'dd/MM/yyyy', backupDate), tripRequestDate )) ||
+					(Jours && getJoursSet(Jours).has( format(tripRequestDate, 'EEEE', {locale: fr}).toLowerCase() ))
 			})
 			.map(
 				(tripProposal) => html`
