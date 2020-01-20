@@ -12,7 +12,7 @@ import {
 export default function _actions(store) {
 	return {
 		setAndPrepareForTripRequest(tripRequest) {
-			const { origin, destination } = tripRequest
+			const { origin, destination, date } = tripRequest
 			tripRequest = undefined
 			const trip = makeTrip(origin, destination)
 
@@ -41,11 +41,13 @@ export default function _actions(store) {
 					) {
 						store.mutations.setTripRequest({
 							...store.state.tripRequest,
+							date,
 							[ASYNC_STATUS]: STATUS_ERROR
 						})
 					} else {
 						store.mutations.setTripRequest({
 							...store.state.tripRequest,
+							date,
 							[ASYNC_STATUS]: STATUS_VALUE
 						})
 					}
@@ -55,6 +57,7 @@ export default function _actions(store) {
 
 			store.mutations.setTripRequest({
 				...trip,
+				date,
 				[ASYNC_STATUS]: STATUS_PENDING
 			})
 		}

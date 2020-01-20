@@ -19,7 +19,8 @@ const store = new Store({
 		positionByPlace: new Map(),
 		tripRequest: {
 			origin: '',
-			destination: ''
+			destination: '',
+			date: undefined
 		},
 		validPlaceNames: []
 	},
@@ -55,8 +56,8 @@ function renderUI(store) {
 		tripRequest,
 		validPlaceNames
 	} = store.state
-	//const {setTripRequest} = store.mutations
-	const { setAndPrepareForTripRequest, toggleTripDisplay } = actions
+	
+	const { setAndPrepareForTripRequest } = actions
 
 	const proposedTrips = [...tripProposalsByTrip.keys()]
 
