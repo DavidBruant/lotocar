@@ -41,17 +41,21 @@ export default function DriversList({
 				>
 			</div>
 		`
-	const tripsByAdditionalTime = request =>
-		displayTrips(
-			tripProposalsByTrip,
-			orderedTrips,
-			tripRequest,
-			([_, { additionalTime }]) => request(additionalTime)
-		)
 
-	const directTrips = tripsByAdditionalTime(time => time < 5),
-		trips10 = tripsByAdditionalTime(time => time >= 10 && time < 20),
-		trips20 = tripsByAdditionalTime(time => time >= 20 && time < 45)
+	const directTrips = orderedTrips
+		.filter(([_, { additionalTime: time }]) => time < 5)
+		.slice(0, 20);
+	
+	const trips10 = orderedTrips
+		.filter(([_, { additionalTime: time }]) => time >= 10 && time < 20)
+		.slice(0, 20);
+
+	const trips20 = orderedTrips
+		.filter(([_, { additionalTime: time }]) => time >= 20 && time < 45)
+		.slice(0, 20);
+
+	const relevantTripsFound = directTrips.length + trips10.length + trips20.length >= 1
+
 	return html`
 		<${styled.div`
 			h2,
@@ -76,35 +80,43 @@ export default function DriversList({
 				font-style: normal;
 			}
 		`}>
-			<h2 key="détour0">${
-		tripRequestAsyncStatus === STATUS_PENDING ?
-			`(recherche en cours)`
-			: (orderedTrips.length === 0 ? `(aucun résultat)` : `Trajets disponibles`)
-		}</h2>
-			${directTrips}
-			${(trips10 || trips20) &&
-		html`
+			<h2 key="détour0">
+				${
+					tripRequestAsyncStatus === STATUS_PENDING && !relevantTripsFound ?
+						`(recherche en cours)`
+						: (!relevantTripsFound ? `(aucun résultat)` : `Trajets disponibles`)
+				}
+			</h2>
+			${TripList(tripProposalsByTrip, directTrips, tripRequest)}
+			${
+				(trips10.length >= 1 || trips20.length >= 1) &&
+				html`
 					<h3 key="détour0">Trajets indirects</h3>
-				`}
-			${trips10 &&
-		html`
-					<small
-						>Un <em>détour de plus de 10 minutes</em> sera nécessaire pour vous
+				`
+			}
+			${
+				trips10.length >= 1 &&
+				html`
+					<small>Un <em>détour de plus de 10 minutes</em> sera nécessaire pour vous
 						récupérer :</small
 					>
-					${trips10}
-				`}
-			${trips20 &&
-		html`
+					${TripList(tripProposalsByTrip, trips10, tripRequest)}
+				
+				`
+			}
+			${
+				trips20.length >= 1 &&
+				html`
 					<small
 						>Un <em>détour conséquent (entre 20 et 45 minutes)</em> sera
 						nécessaire pour vous récupérer :</small
 					>
-					${trips20}
+					${TripList(tripProposalsByTrip, trips20, tripRequest)}
 				`}
 		</div>
 	`
 }
+
 
 const JOURS_LOWERCASE = new Set(['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'])
 function getJoursSet(JoursString){
@@ -117,15 +129,12 @@ function getJoursSet(JoursString){
 	)
 }
 
-const displayTrips = (
+const TripList = (
 	tripProposalsByTrip,
 	trips,
-	tripRequest,
-	filter
+	tripRequest
 ) => {
-	let selectedTrips = trips
-		.slice(0, 20)
-		.filter(filter)
+	const TripProposalComponents = trips
 		.map(([trip]) => {
 			const tripProposals = tripProposalsByTrip.get(trip)
 
@@ -149,10 +158,10 @@ const displayTrips = (
 				`
 			)
 		})
-	if (!selectedTrips.length) return undefined
-	return html`
+	
+	return TripProposalComponents.length === 0 ? undefined : html`
 		<ul className="drivers-list">
-			${selectedTrips}
+			${TripProposalComponents}
 		</ul>
 	`
 }
